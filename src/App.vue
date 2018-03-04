@@ -1,7 +1,10 @@
 <template>
   <div id="app"> 
-    <p>点击展示picker</p>
-    <better-picker></better-picker>
+    <p @click="showPicker()">点击展示picker</p>
+    <better-picker 
+      ref="picker"
+      :pickerData="picker.data">
+    </better-picker>
   </div>
 </template>
 
@@ -10,8 +13,19 @@ export default {
   name: 'app',
   data () {
     return {
+      picker: {
+        data: [[1,2,3,4,5]],
+      },
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  methods: {
+    showPicker() {
+      this.$refs.picker.show();
+    },
+    hidePicker() {
+      this.$refs.picker.hide();
+    },
   }
 }
 </script>

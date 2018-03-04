@@ -1,9 +1,12 @@
 <template>
   <div>
-    <div class="mask" v-show="show"></div>
-    <div class="picker" v-show="show">
+    <transition name="fade">
+      <div class="mask" v-show="display" @click="hide"></div>
+    </transition>
+    <transition name="slide">
+      <div class="picker" v-show="display">
       <div class="picker-title">
-        <span class="pt-cancel">取消</span>
+        <span class="pt-cancel" @click="hide">取消</span>
         <span class="pt-submit">确认</span>
         <h4>picker</h4>
       </div>
@@ -19,6 +22,7 @@
         </div>
       </div>
     </div>
+    </transition>
   </div>
 </template>
 
@@ -28,7 +32,7 @@
   export default {
     name: 'better-picker',
     props: {
-      data: {
+      pickerData: {
         type: Array,
         default() {
           return [];
@@ -43,19 +47,25 @@
     },
     data () {
       return {
-        show: false,
-        pickerData,
+        display: false,
         wheels: [],
       }
     },
     methods: {
       show() {
+        this.display = true;
         this.wheels = [];
         this.$nextTick(() => {
           const wheelWrapper = this.$refs.wheelWrapper;
           this.pickerData.forEach((item, index) => {
             this.initWheel(wheelWrapper.children[index], index);
           });
+        });
+      },
+      hide() {
+        this.display = false;
+        this.wheels.forEach((wheel) => {
+          wheel.disable();
         });
       },
       initWheel(wheelDom, i) {
@@ -70,13 +80,28 @@
         }
       },
     },
-    created() {
-      this.show();
-    },
   }
 </script>
 
 <style lang="scss" scoped>
+  /* fade */
+  .fade-enter, .fade-leave-to {
+    opacity: 0;
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: all .3s ease;
+  }
+
+  /* slide */
+  .slide-enter, .slide-leave-to {
+    opacity: 0.5;
+    transform: translate3d(0, 270px, 0)
+  }
+
+  .slide-enter-active, .slide-leave-active {
+    transition: all .3s ease;
+  }
 
   .mask {
     position: fixed;
@@ -113,18 +138,20 @@
 
     span {
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
+      height: 44px;
+      line-height: 44px;
+      padding: 0 12px;    
       font-size: 14px;
     }
 
     .pt-cancel {
-      left: 12px;
+      left: 0;
       color: #999;
     }
 
     .pt-submit {
-      right: 12px;
+      right: 0;
+      color: #f85444;
     }
 
     h4 {
