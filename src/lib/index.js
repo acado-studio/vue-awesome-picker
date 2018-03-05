@@ -1,7 +1,7 @@
-import BetterPicker from './better-picker.vue';
+import AwesomePicker from './vue-awesome-picker.vue';
 const picker = {
   install(Vue) {
-    Vue.component(BetterPicker.name, BetterPicker);
+    Vue.component(AwesomePicker.name, AwesomePicker);
   }
 }
 if (typeof window !== 'undefined' && window.Vue) { 

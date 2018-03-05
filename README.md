@@ -1,4 +1,4 @@
-# better-picker
+# vue-awesome-picker
 
 > A Vue.js project
 

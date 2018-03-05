@@ -6,8 +6,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: 'better-picker.js',
-    library: 'BetterPicker',
+    filename: 'vue-awesome-picker.js',
+    library: 'VueAwesomePicker',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },

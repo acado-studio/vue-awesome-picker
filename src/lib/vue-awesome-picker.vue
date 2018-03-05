@@ -6,15 +6,15 @@
     <transition name="slide">
       <div class="picker" v-show="display">
       <div class="picker-title">
-        <span class="pt-cancel" @click="hide">取消</span>
-        <span class="pt-submit">确认</span>
-        <h4>picker</h4>
+        <span class="pt-cancel" @click="cancel">取消</span>
+        <span class="pt-submit" @click="confirm">确认</span>
+        <h4>{{title}}</h4>
       </div>
       <div class="picker-panel">
         <div class="picker-mask-top"></div>
         <div class="picker-mask-bottom"></div>
         <div class="picker-wheel-wrapper" ref="wheelWrapper">
-          <div class="picker-wheel" v-for="(wheel, index) in pickerData" :key="index">
+          <div class="picker-wheel" v-for="(wheel, index) in data" :key="index">
             <ul class="wheel-scroll">
               <li class="wheel-item" v-for="(item, index) in wheel" :key="index">{{item}}</li>
             </ul>
@@ -29,20 +29,28 @@
 <script>
   import BScroll from 'better-scroll';
 
+  const EVENT_CHANEG = 'change';
+  const EVENT_CONFIRM = 'confirm';
+  const EVENT_CANCEL = 'cancel';
+
   export default {
-    name: 'better-picker',
+    name: 'awesome-picker',
     props: {
-      pickerData: {
+      data: {
         type: Array,
         default() {
           return [];
         },
       },
-      selectedIndex: {
+      defaultSelected: {
         type: Array,
         default() {
           return [];
         },
+      },
+      title: {
+        type: String,
+        default: '',
       },
     },
     data () {
@@ -54,30 +62,66 @@
     methods: {
       show() {
         this.display = true;
-        this.wheels = [];
-        this.$nextTick(() => {
-          const wheelWrapper = this.$refs.wheelWrapper;
-          this.pickerData.forEach((item, index) => {
-            this.initWheel(wheelWrapper.children[index], index);
-          });
-        });
+        this.initPicker();
       },
       hide() {
-        this.display = false;
         this.wheels.forEach((wheel) => {
           wheel.disable();
         });
+        this.display = false;
       },
-      initWheel(wheelDom, i) {
+      initPicker() {
+        this.wheels = [];
+        this.$nextTick(() => {
+          const wheelWrapper = this.$refs.wheelWrapper;
+          this.data.forEach((item, index) => {
+            this.createWheel(wheelWrapper, index);
+          });
+        });
+      },
+      createWheel(wheelWrapper, i) {
         if (!this.wheels[i]) {
-          const wheel = this.wheels[i] = new BScroll(wheelDom, {
+          const wheel = this.wheels[i] = new BScroll(wheelWrapper.children[i], {
             wheel: {
               selectedIndex: 0,
               rotate: 25,
             },
             swipeTime: 2500,
           });
+          wheel.on('scrollEnd', () => {
+            const currentValue = this.getCurrentValue();
+            this.$emit(EVENT_CHANEG, currentValue);
+          });
+        } else {
+          this.wheels[i].refresh();
         }
+      },
+      reload(newData, oldData) {
+      },
+      reloadWheel() {
+
+      },
+      getCurrentValue() {
+        const value = [];
+        this.wheels.forEach((wheel, i) => {
+          value.push(this.data[i][wheel.getSelectedIndex()]);
+        });
+        return value;
+      },
+      confirm() {
+        const isInTransition = this.wheels.some((wheel) => {
+          return wheel.isInTransition;
+        });
+        if (isInTransition) {
+          return;
+        }
+        const selectedValues = this.getCurrentValue();
+        this.$emit(EVENT_CONFIRM, selectedValues);
+        this.hide();
+      },
+      cancel() {
+        this.$emit(EVENT_CANCEL);
+        this.hide();
       },
     },
   }
@@ -181,7 +225,7 @@
 
     .picker-mask-top {
       top: 24px;
-      background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,.2));
+      background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,.5));
 
       &:after {
         content: '';
@@ -197,7 +241,7 @@
 
     .picker-mask-bottom {
       bottom: 24px;
-      background: linear-gradient(to top, rgba(255,255,255,.9), rgba(255,255,255,.6));
+      background: linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,.5));
 
       &:before {
         content: '';
