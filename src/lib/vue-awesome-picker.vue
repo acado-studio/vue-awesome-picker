@@ -29,6 +29,8 @@
 <script>
   import BScroll from 'better-scroll';
 
+  const MAX_WHEEL_NUM = 3;
+
   const EVENT_CHANEG = 'change';
   const EVENT_CONFIRM = 'confirm';
   const EVENT_CANCEL = 'cancel';
@@ -55,6 +57,7 @@
     },
     data () {
       return {
+        isCascadePicker: false,
         display: false,
         wheels: [],
       }
@@ -77,6 +80,7 @@
           this.data.forEach((item, index) => {
             this.createWheel(wheelWrapper, index);
           });
+          this.setValue(this.defaultSelected);
         });
       },
       createWheel(wheelWrapper, i) {
@@ -84,22 +88,23 @@
           const wheel = this.wheels[i] = new BScroll(wheelWrapper.children[i], {
             wheel: {
               selectedIndex: 0,
-              rotate: 25,
+              rotate: 30,
             },
             swipeTime: 2500,
           });
           wheel.on('scrollEnd', () => {
             const currentValue = this.getCurrentValue();
+            this.isCascadePicker && this.setData(i);
             this.$emit(EVENT_CHANEG, currentValue);
           });
         } else {
           this.wheels[i].refresh();
         }
       },
-      reload(newData, oldData) {
-      },
-      reloadWheel() {
-
+      setValue(data) {
+        this.wheels.forEach((wheel, i) => {
+          wheel.wheelTo(data[i] && this.data[i].indexOf(data[i]) !== -1 ? this.data[i].indexOf(data[i]) : 0);
+        });
       },
       getCurrentValue() {
         const value = [];

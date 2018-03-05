@@ -11,21 +11,20 @@
       ref="picker0"
       :data="picker0.data"
       :title="picker0.title"
+      :defaultSelected="picker0.defaultSelected"
       @confirm="handlePicker0Confirm">
     </awesome-picker>
   </div>
 </template>
 
 <script>
-const DEMO_DATA_0 = [1,2,3,4,5,6,7,8,9];
-const DEMO_DATA_1 = ['a','b','c','d','e','f','g','h','i'];
-const DEMO_DATA_2 = ['A','B','C','D','E','F','G','H','I'];
 export default {
   name: 'app',
   data () {
     return {
       picker0: {
         title: '多列选择器',
+        defaultSelected: [2,3,4],
         data: [
           [1,2,3,4,5],
           [1,2,3,4,5],
@@ -57,7 +56,6 @@ export default {
   methods: {
     showPicker0() {
       this.$refs.picker0.show();
-      this.picker0.data = [DEMO_DATA_0,DEMO_DATA_1,DEMO_DATA_2];
     },
     handlePicker0Confirm(v) {
       console.log(v);
