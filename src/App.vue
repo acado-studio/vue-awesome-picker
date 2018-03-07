@@ -32,7 +32,6 @@
     <awesome-picker 
       ref="picker4"
       :title="picker4.title"
-      :data="picker4.data"
       :type="picker4.type"
       @confirm="handlePickerConfirm">
     </awesome-picker>
@@ -93,7 +92,7 @@ export default {
       },
       picker4: {
         title: '区域选择器',
-        data: areaData,        
+        type: 'area',        
       },
     }
   },

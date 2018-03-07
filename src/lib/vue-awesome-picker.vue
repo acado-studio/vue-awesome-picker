@@ -69,14 +69,17 @@
     data () {
       return {
         display: false,
-        pickerData: this.pickerDataGetter(),
+        pickerData: this.dataGetter(),
         pickerIndex: this.index.slice(),
         wheels: [],
       }
     },
     computed: {
+      proxyData() {
+        return this.dataGetter();
+      },
       dataType() {
-        return (this.data[0] && Array.isArray(this.data[0])) || !this.data[0] ? DATA_NORMAL : DATA_CASCADE;
+        return !Array.isArray(this.proxyData[0]) || this.type === TYPE_AREA ? DATA_CASCADE : DATA_NORMAL;
       },
     },
     methods: {
@@ -93,18 +96,18 @@
         this.display = false;
       },
 
-      pickerDataGetter() {
+      dataGetter() {
         let data = null;
         switch (this.type) {
           case TYPE_TIME:
-            data = timeData.slice(); break;
+            data = timeData; break;
           case TYPE_AREA:
-            data = areaData.slice(); break;
+            data = areaData; break;
           case TYPE_NORMAL:
           default:
-            data = this.data.slice(); break;
+            data = this.data; break;
         }
-        return data;
+        return data.slice();
       },
 
       initPicker() {
@@ -167,7 +170,7 @@
       },
 
       updatePickerData(wheelIndex = 0) {
-        let data = this.data.slice();
+        let data = this.proxyData.slice();
         let i = 0;
         while(data) {
           if (i >= wheelIndex) {
