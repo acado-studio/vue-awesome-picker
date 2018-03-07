@@ -14,7 +14,7 @@
         <div class="picker-mask-top"></div>
         <div class="picker-mask-bottom"></div>
         <div class="picker-wheel-wrapper" ref="wheelWrapper">
-          <div class="picker-wheel" v-for="(wheel, index) in data" :key="index">
+          <div class="picker-wheel" v-for="(wheel, index) in pickerData" :key="index">
             <ul class="wheel-scroll">
               <li class="wheel-item" v-for="(item, index) in wheel" :key="index">{{item}}</li>
             </ul>
@@ -29,9 +29,9 @@
 <script>
   import BScroll from 'better-scroll';
 
-  const MAX_WHEEL_NUM = 3;
+  const TYPE_NORMAL = 'normal';
+  const TYPE_CASCADE = 'cascade';
 
-  const EVENT_CHANEG = 'change';
   const EVENT_CONFIRM = 'confirm';
   const EVENT_CANCEL = 'cancel';
 
@@ -44,7 +44,11 @@
           return [];
         },
       },
-      defaultSelected: {
+      type: {
+        type: String,
+        default: TYPE_NORMAL,
+      },
+      index: {
         type: Array,
         default() {
           return [];
@@ -57,14 +61,16 @@
     },
     data () {
       return {
-        isCascadePicker: false,
         display: false,
+        pickerData: this.data.slice(),
+        pickerIndex: this.index.slice(),
         wheels: [],
       }
     },
     methods: {
       show() {
         this.display = true;
+        this.type === TYPE_CASCADE && this.updatePickerData();
         this.initPicker();
       },
       hide() {
@@ -77,10 +83,10 @@
         this.wheels = [];
         this.$nextTick(() => {
           const wheelWrapper = this.$refs.wheelWrapper;
-          this.data.forEach((item, index) => {
+          this.pickerData.forEach((item, index) => {
             this.createWheel(wheelWrapper, index);
           });
-          this.setValue(this.defaultSelected);
+          this.setValue(this.pickerIndex);
         });
       },
       createWheel(wheelWrapper, i) {
@@ -88,30 +94,88 @@
           const wheel = this.wheels[i] = new BScroll(wheelWrapper.children[i], {
             wheel: {
               selectedIndex: 0,
-              rotate: 30,
+              rotate: 25,
             },
-            swipeTime: 2500,
+            bounceTime: 500,
+            swipeTime: 1800,
           });
           wheel.on('scrollEnd', () => {
-            const currentValue = this.getCurrentValue();
-            this.isCascadePicker && this.setData(i);
-            this.$emit(EVENT_CHANEG, currentValue);
+            const value = this.getCurrentValue();
+            this.cascadePickerChange(i, value[i].index);
           });
         } else {
           this.wheels[i].refresh();
         }
+        return this.wheels[i];
+      },
+      cascadePickerChange(i, newIndex) {
+        if (this.type !== TYPE_CASCADE) {
+          return
+        }
+        if (newIndex !== this.pickerIndex[i]) {
+          this.pickerIndex.splice(i, 1, newIndex);
+          this.updatePickerData(i + 1);
+        }
       },
       setValue(data) {
         this.wheels.forEach((wheel, i) => {
-          wheel.wheelTo(data[i] && this.data[i].indexOf(data[i]) !== -1 ? this.data[i].indexOf(data[i]) : 0);
+          wheel.wheelTo(data[i] || 0);
         });
       },
       getCurrentValue() {
         const value = [];
         this.wheels.forEach((wheel, i) => {
-          value.push(this.data[i][wheel.getSelectedIndex()]);
+          const j = wheel.getSelectedIndex();
+          value.push({
+            index: j, 
+            value: this.pickerData[i][j],
+          });
         });
         return value;
+      },
+      updatePickerData(wheelIndex = 0) {
+        let data = this.data.slice();
+        let i = 0;
+        while(data) {
+          if (i >= wheelIndex) {
+            let wheelData = [];
+            data.forEach((item) => {
+              wheelData.push(item.value);
+            });
+            this.pickerData[i] = wheelData;
+            this.pickerIndex[i] = wheelIndex === 0
+              ? (this.pickerIndex[i] < data.length ? this.pickerIndex[i] || 0 : 0)
+              : this.reloadWheel(i, wheelData);
+          }
+          data = data.length ? data[this.pickerIndex[i]].children : null;
+          i++;
+        }
+      },
+      reloadWheel(index, data) {
+        const wheelWrapper = this.$refs.wheelWrapper;
+        let scroll = wheelWrapper.children[index].querySelector('.wheel-scroll');
+        let wheel = this.wheels ? this.wheels[index] : false;
+        let dist = 0;
+        if (scroll && wheel) {
+          let oldData = this.pickerData[index];
+          this.$set(this.pickerData, index, data);
+          let selectedIndex = wheel.getSelectedIndex();
+          if (oldData.length) {
+            let oldValue = oldData[selectedIndex]
+            for (let i = 0; i < data.length; i++) {
+              if (data[i] === oldValue) {
+                dist = i;
+                break;
+              }
+            }
+          }
+          this.pickerIndex[index] = dist;
+          this.$nextTick(() => {
+            wheel = this.createWheel(wheelWrapper, index)
+            wheel.wheelTo(dist)
+          })
+        }
+        return dist;
       },
       confirm() {
         const isInTransition = this.wheels.some((wheel) => {
@@ -200,7 +264,7 @@
 
     .pt-submit {
       right: 0;
-      color: #f85444;
+      color: #42b983;
     }
 
     h4 {
@@ -221,7 +285,7 @@
       position: absolute;
       left: 0;
       right: 0;
-      height: 73px;
+      height: 72px;
       background: #fff;
       transform: translateZ(0);
       z-index: 1;
@@ -272,12 +336,12 @@
     }
 
     .wheel-scroll {
-      margin-top: 73px;
+      margin-top: 72px;
 
       .wheel-item {
-        height: 32px;
-        line-height: 32px;
-        font-size: 16px;
+        height: 34px;
+        line-height: 34px;
+        font-size: 18px;
         text-align: center;
       }
     }
