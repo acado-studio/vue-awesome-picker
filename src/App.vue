@@ -4,7 +4,7 @@
     <p class="btn" @click="showPicker0">多列</p>
     <p class="btn" @click="showPicker1">联级</p>
     <p class="btn" @click="showPicker2">时间</p>
-    <p class="btn">日期</p>
+    <p class="btn" @click="showPicker3">日期</p>
     <p class="btn" @click="showPicker4">区域</p>
     <awesome-picker 
       ref="picker0"
@@ -108,6 +108,9 @@ export default {
     },
     showPicker2() {
       this.$refs.picker2.show();
+    },
+    showPicker3() {
+      this.value = '坑待填，先睡觉去';
     },
     showPicker4() {
       this.$refs.picker4.show();

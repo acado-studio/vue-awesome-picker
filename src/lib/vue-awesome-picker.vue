@@ -79,23 +79,10 @@
         return this.dataGetter();
       },
       dataType() {
-        return !Array.isArray(this.proxyData[0]) || this.type === TYPE_AREA ? DATA_CASCADE : DATA_NORMAL;
+        return !Array.isArray(this.proxyData[0]) ? DATA_CASCADE : DATA_NORMAL;
       },
     },
     methods: {
-      show() {
-        this.display = true;
-        this.dataType === DATA_CASCADE && this.updatePickerData();
-        this.initPicker();
-      },
-
-      hide() {
-        this.wheels.forEach((wheel) => {
-          wheel.disable();
-        });
-        this.display = false;
-      },
-
       dataGetter() {
         let data = null;
         switch (this.type) {
@@ -108,6 +95,19 @@
             data = this.data; break;
         }
         return data.slice();
+      },
+
+      show() {
+        this.display = true;
+        this.initPicker();
+        this.dataType === DATA_CASCADE && this.updatePickerData();
+      },
+
+      hide() {
+        this.wheels.forEach((wheel) => {
+          wheel.disable();
+        });
+        this.display = false;
       },
 
       initPicker() {
