@@ -1,49 +1,60 @@
 <template>
   <div id="app" class="main-wrapper">
-    <textarea></textarea>
+    <textarea v-model="value"></textarea>
     <p class="btn" @click="showPicker0">多列</p>
     <p class="btn" @click="showPicker1">联级</p>
-    <!--
-    <p class="btn">时间</p>
+    <p class="btn" @click="showPicker2">时间</p>
     <p class="btn">日期</p>
-    <p class="btn">城区</p>
-    -->
+    <p class="btn" @click="showPicker4">区域</p>
     <awesome-picker 
       ref="picker0"
-      :data="picker0.data"
       :title="picker0.title"
-      :vibrate="picker0.vibrate"
+      :data="picker0.data"
       :index="picker0.index"
-      @confirm="handlePicker0Confirm">
+      @confirm="handlePickerConfirm">
     </awesome-picker>
 
     <awesome-picker 
       ref="picker1"
-      :type="picker1.type"
+      :title="picker1.title"
       :data="picker1.data"
       :index="picker1.index"
-      :title="picker1.title"
-      @confirm="handlePicker1Confirm">
+      @confirm="handlePickerConfirm">
+    </awesome-picker>
+
+    <awesome-picker 
+      ref="picker2"
+      :title="picker2.title"
+      :type="picker2.type"
+      @confirm="handlePickerConfirm">
+    </awesome-picker>
+
+    <awesome-picker 
+      ref="picker4"
+      :title="picker4.title"
+      :data="picker4.data"
+      :type="picker4.type"
+      @confirm="handlePickerConfirm">
     </awesome-picker>
   </div>
 </template>
 
 <script>
+import areaData from './lib/data/area';
+
 export default {
   name: 'app',
   data () {
     return {
+      value: null,
       picker0: {
         title: '多列选择器',
-        vibrate: true,
-        index: [0,1,1],
         data: [
           ['上海', '北京', '天津', '呼和浩特', '成都','上海', '北京', '天津', '呼和浩特', '成都','上海', '北京', '天津', '呼和浩特', '成都'],
         ],
       },
       picker1: {
         title: '联级选择器',
-        type: 'cascade',
         data: [
           {
             value: 1,
@@ -60,22 +71,50 @@ export default {
               { value: 'e' },
             ],
           },
+          {
+            value: 3,
+            children: [
+              { value: 'g' },
+              { value: 'j' },
+            ],
+          },
+          {
+            value: 4,
+            children: [
+              { value: 'g' },
+              { value: 'j' },
+            ],
+          }
         ],
+      },
+      picker2: {
+        title: '时间选择器',
+        type: 'time',
+      },
+      picker4: {
+        title: '区域选择器',
+        data: areaData,        
       },
     }
   },
   methods: {
     showPicker0() {
       this.$refs.picker0.show();
-    },
-    handlePicker0Confirm(v) {
-      console.log(v);
+      setTimeout(() => {
+        this.picker0.data = [['测试']];
+      }, 5000);
     },
     showPicker1() {
       this.$refs.picker1.show();
     },
-    handlePicker1Confirm(v) {
-      console.log(v);
+    showPicker2() {
+      this.$refs.picker2.show();
+    },
+    showPicker4() {
+      this.$refs.picker4.show();
+    },
+    handlePickerConfirm(v) {
+      this.value = v ? JSON.stringify(v) : null;
     },
   }
 }
@@ -96,6 +135,8 @@ export default {
     box-sizing: border-box;
     outline: none;
     color: #35495d;
+    font-size: 14px;
+    resize: none;
   }
 
   .btn {

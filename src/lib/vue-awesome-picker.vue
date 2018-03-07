@@ -28,9 +28,16 @@
 
 <script>
   import BScroll from 'better-scroll';
+  import timeData from './data/time.js';
+  import areaData from './data/area.js';
+
+  const DATA_NORMAL = 'normal';
+  const DATA_CASCADE = 'cascade';
 
   const TYPE_NORMAL = 'normal';
-  const TYPE_CASCADE = 'cascade';
+  const TYPE_TIME = 'time';
+  const TYPE_DATE = 'date';
+  const TYPE_AREA = 'area';
 
   const EVENT_CONFIRM = 'confirm';
   const EVENT_CANCEL = 'cancel';
@@ -62,23 +69,44 @@
     data () {
       return {
         display: false,
-        pickerData: this.data.slice(),
+        pickerData: this.pickerDataGetter(),
         pickerIndex: this.index.slice(),
         wheels: [],
       }
     },
+    computed: {
+      dataType() {
+        return (this.data[0] && Array.isArray(this.data[0])) || !this.data[0] ? DATA_NORMAL : DATA_CASCADE;
+      },
+    },
     methods: {
       show() {
         this.display = true;
-        this.type === TYPE_CASCADE && this.updatePickerData();
+        this.dataType === DATA_CASCADE && this.updatePickerData();
         this.initPicker();
       },
+
       hide() {
         this.wheels.forEach((wheel) => {
           wheel.disable();
         });
         this.display = false;
       },
+
+      pickerDataGetter() {
+        let data = null;
+        switch (this.type) {
+          case TYPE_TIME:
+            data = timeData.slice(); break;
+          case TYPE_AREA:
+            data = areaData.slice(); break;
+          case TYPE_NORMAL:
+          default:
+            data = this.data.slice(); break;
+        }
+        return data;
+      },
+
       initPicker() {
         this.wheels = [];
         this.$nextTick(() => {
@@ -86,9 +114,10 @@
           this.pickerData.forEach((item, index) => {
             this.createWheel(wheelWrapper, index);
           });
-          this.setValue(this.pickerIndex);
+          this.wheelToIndex(this.pickerIndex);
         });
       },
+
       createWheel(wheelWrapper, i) {
         if (!this.wheels[i]) {
           const wheel = this.wheels[i] = new BScroll(wheelWrapper.children[i], {
@@ -100,28 +129,31 @@
             swipeTime: 1800,
           });
           wheel.on('scrollEnd', () => {
-            const value = this.getCurrentValue();
-            this.cascadePickerChange(i, value[i].index);
+            this.cascadePickerChange(i);
           });
         } else {
           this.wheels[i].refresh();
         }
         return this.wheels[i];
       },
-      cascadePickerChange(i, newIndex) {
-        if (this.type !== TYPE_CASCADE) {
+
+      cascadePickerChange(i) {
+        if (this.dataType !== DATA_CASCADE) {
           return
         }
+        const newIndex = this.getCurrentValue()[i].index;
         if (newIndex !== this.pickerIndex[i]) {
           this.pickerIndex.splice(i, 1, newIndex);
           this.updatePickerData(i + 1);
         }
       },
-      setValue(data) {
+
+      wheelToIndex(data) {
         this.wheels.forEach((wheel, i) => {
           wheel.wheelTo(data[i] || 0);
         });
       },
+
       getCurrentValue() {
         const value = [];
         this.wheels.forEach((wheel, i) => {
@@ -133,6 +165,7 @@
         });
         return value;
       },
+
       updatePickerData(wheelIndex = 0) {
         let data = this.data.slice();
         let i = 0;
@@ -150,25 +183,16 @@
           data = data.length ? data[this.pickerIndex[i]].children : null;
           i++;
         }
+        this.pickerData = this.pickerData.slice(0, i);
       },
+
       reloadWheel(index, data) {
         const wheelWrapper = this.$refs.wheelWrapper;
         let scroll = wheelWrapper.children[index].querySelector('.wheel-scroll');
         let wheel = this.wheels ? this.wheels[index] : false;
         let dist = 0;
         if (scroll && wheel) {
-          let oldData = this.pickerData[index];
           this.$set(this.pickerData, index, data);
-          let selectedIndex = wheel.getSelectedIndex();
-          if (oldData.length) {
-            let oldValue = oldData[selectedIndex]
-            for (let i = 0; i < data.length; i++) {
-              if (data[i] === oldValue) {
-                dist = i;
-                break;
-              }
-            }
-          }
           this.pickerIndex[index] = dist;
           this.$nextTick(() => {
             wheel = this.createWheel(wheelWrapper, index)
@@ -177,6 +201,7 @@
         }
         return dist;
       },
+
       confirm() {
         const isInTransition = this.wheels.some((wheel) => {
           return wheel.isInTransition;
@@ -188,6 +213,7 @@
         this.$emit(EVENT_CONFIRM, selectedValues);
         this.hide();
       },
+
       cancel() {
         this.$emit(EVENT_CANCEL);
         this.hide();
@@ -294,7 +320,7 @@
 
     .picker-mask-top {
       top: 24px;
-      background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,.5));
+      background: linear-gradient(to bottom, rgba(255,255,255,.9), rgba(255,255,255,.5));
 
       &:after {
         content: '';
@@ -310,7 +336,7 @@
 
     .picker-mask-bottom {
       bottom: 24px;
-      background: linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,.5));
+      background: linear-gradient(to top, rgba(255,255,255,.9), rgba(255,255,255,.5));
 
       &:before {
         content: '';
@@ -343,6 +369,9 @@
         line-height: 34px;
         font-size: 18px;
         text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }
