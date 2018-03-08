@@ -10,30 +10,40 @@
       ref="picker0"
       :title="picker0.title"
       :data="picker0.data"
-      :index="picker0.index"
-      @confirm="handlePickerConfirm">
+      :anchor="picker0.anchor"
+      @confirm="handlePicker0Confirm">
     </awesome-picker>
 
     <awesome-picker 
       ref="picker1"
       :title="picker1.title"
       :data="picker1.data"
-      :index="picker1.index"
-      @confirm="handlePickerConfirm">
+      :anchor="picker1.anchor"
+      @confirm="handlePicker1Confirm">
     </awesome-picker>
 
     <awesome-picker 
       ref="picker2"
       :title="picker2.title"
       :type="picker2.type"
-      @confirm="handlePickerConfirm">
+      :anchor="picker2.anchor"
+      @confirm="handlePicker2Confirm">
+    </awesome-picker>
+
+    <awesome-picker 
+      ref="picker3"
+      :title="picker3.title"
+      :type="picker3.type"
+      :anchor="picker3.anchor"
+      @confirm="handlePicker3Confirm">
     </awesome-picker>
 
     <awesome-picker 
       ref="picker4"
       :title="picker4.title"
       :type="picker4.type"
-      @confirm="handlePickerConfirm">
+      :anchor="picker4.anchor"
+      @confirm="handlePicker4Confirm">
     </awesome-picker>
   </div>
 </template>
@@ -47,50 +57,61 @@ export default {
     return {
       value: null,
       picker0: {
+        anchor: [],
         title: '多列选择器',
         data: [
-          ['上海', '北京', '天津', '呼和浩特', '成都','上海', '北京', '天津', '呼和浩特', '成都','上海', '北京', '天津', '呼和浩特', '成都'],
+          ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
+          ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
         ],
       },
       picker1: {
+        anchor: [],
         title: '联级选择器',
         data: [
           {
-            value: 1,
+            value: 'A',
             children: [
-              { value: 'a' },
-              { value: 'b' },
-              { value: 'c' },
+              { value: 'A-a' },
+              { value: 'A-b' },
+              { value: 'A-c' },
             ],
           },
           {
-            value: 2,
+            value: 'B',
             children: [
-              { value: 'd' },
-              { value: 'e' },
+              { value: 'B-a' },
+              { value: 'B-b' },
             ],
           },
           {
-            value: 3,
+            value: 'C',
             children: [
-              { value: 'g' },
-              { value: 'j' },
+              { value: 'C-a' },
+              { value: 'C-b' },
+              { value: 'C-c' },
+              { value: 'C-d' },
             ],
           },
           {
-            value: 4,
+            value: 'D',
             children: [
-              { value: 'g' },
-              { value: 'j' },
+              { value: 'D-a' },
             ],
           }
         ],
       },
       picker2: {
+        anchor: [],
         title: '时间选择器',
         type: 'time',
       },
+      picker3: {
+        anchor: [],
+        title: '日期选择器',
+        type: 'date',
+      },
       picker4: {
+        anchor: [],
         title: '区域选择器',
         type: 'area',        
       },
@@ -99,26 +120,49 @@ export default {
   methods: {
     showPicker0() {
       this.$refs.picker0.show();
-      setTimeout(() => {
-        this.picker0.data = [['测试']];
-      }, 5000);
     },
+    handlePicker0Confirm(v) {
+      this.picker0.anchor = v;
+      this.value = v ? JSON.stringify(v) : null;
+    },
+
     showPicker1() {
       this.$refs.picker1.show();
     },
+    handlePicker1Confirm(v) {
+      this.picker1.anchor = v;
+      this.value = v ? JSON.stringify(v) : null;
+    },
+
     showPicker2() {
       this.$refs.picker2.show();
     },
-    showPicker3() {
-      this.value = '坑待填，先睡觉去';
+    handlePicker2Confirm(v) {
+      this.picker2.anchor = v;
+      this.value = v ? JSON.stringify(v) : null;
     },
+
+    showPicker3() {
+      this.$refs.picker3.show();
+    },
+    handlePicker3Confirm(v) {
+      this.picker3.anchor = v;
+      this.value = v ? JSON.stringify(v) : null;
+    },
+
     showPicker4() {
       this.$refs.picker4.show();
     },
-    handlePickerConfirm(v) {
+    handlePicker4Confirm(v) {
+      this.picker4.anchor = v;
       this.value = v ? JSON.stringify(v) : null;
     },
-  }
+  },
+  created() {
+    setTimeout(() => {
+      this.picker1.data = [[1,2,3], [4,5,6], [1,2,3]];
+    }, 5000);
+  },
 }
 </script>
 
@@ -128,7 +172,7 @@ export default {
   }
 
   textarea {
-    height: 80px;
+    height: 88px;
     width: 100%;
     margin-bottom: 12px;
     padding: 12px;

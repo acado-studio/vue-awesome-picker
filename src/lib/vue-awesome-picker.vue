@@ -30,6 +30,7 @@
   import BScroll from 'better-scroll';
   import timeData from './data/time.js';
   import areaData from './data/area.js';
+  import { dateData, dateAnchor } from './data/date.js';
 
   const DATA_NORMAL = 'normal';
   const DATA_CASCADE = 'cascade';
@@ -51,15 +52,15 @@
           return [];
         },
       },
-      type: {
-        type: String,
-        default: TYPE_NORMAL,
-      },
-      index: {
+      anchor: {
         type: Array,
         default() {
           return [];
         },
+      },
+      type: {
+        type: String,
+        default: TYPE_NORMAL,
       },
       title: {
         type: String,
@@ -69,14 +70,23 @@
     data () {
       return {
         display: false,
+        dataChange: false,
         pickerData: this.dataGetter(),
-        pickerIndex: this.index.slice(),
+        pickerAnchor: this.anchorGetter(),
         wheels: [],
       }
+    },
+    watch: {
+      data() {
+        this.setPickerData();
+      },
     },
     computed: {
       proxyData() {
         return this.dataGetter();
+      },
+      proxyAnchor() {
+        return this.anchorGetter();
       },
       dataType() {
         return !Array.isArray(this.proxyData[0]) ? DATA_CASCADE : DATA_NORMAL;
@@ -88,6 +98,8 @@
         switch (this.type) {
           case TYPE_TIME:
             data = timeData; break;
+          case TYPE_DATE:
+            data = dateData; break;
           case TYPE_AREA:
             data = areaData; break;
           case TYPE_NORMAL:
@@ -97,10 +109,44 @@
         return data.slice();
       },
 
+      anchorGetter() {
+        let anchor = [];
+        if (this.anchor.length) {
+          anchor = this.anchor;
+        } else {
+          switch (this.type) {
+            case TYPE_DATE:
+              anchor = dateAnchor; break;
+            default:
+              anchor = this.anchor; break;
+          }
+        }
+
+        anchor = anchor.map((item, i) => {
+          let index = 0;
+          if (item.index) {
+            index = item.index;
+          } else if (item.value) {
+            index = this.pickerData && this.pickerData[i] && this.pickerData[i].indexOf(item.value) > -1 
+              ? this.pickerData[i].indexOf(item.value) : 0;
+          }
+          return index;
+        });
+        return anchor.slice();
+      },
+
       show() {
         this.display = true;
-        this.initPicker();
-        this.dataType === DATA_CASCADE && this.updatePickerData();
+
+        if (!this.wheels || !this.wheels.length || this.dataChange) {
+          this.dataChange = false;
+          this.initPicker();
+          this.dataType === DATA_CASCADE && this.updatePickerData();
+        } else {
+          this.wheels.forEach((wheel) => {
+            wheel.enable();
+          });
+        }
       },
 
       hide() {
@@ -117,7 +163,7 @@
           this.pickerData.forEach((item, index) => {
             this.createWheel(wheelWrapper, index);
           });
-          this.wheelToIndex(this.pickerIndex);
+          this.wheelToAnchor(this.proxyAnchor);
         });
       },
 
@@ -145,13 +191,13 @@
           return
         }
         const newIndex = this.getCurrentValue()[i].index;
-        if (newIndex !== this.pickerIndex[i]) {
-          this.pickerIndex.splice(i, 1, newIndex);
+        if (newIndex !== this.pickerAnchor[i]) {
+          this.pickerAnchor.splice(i, 1, newIndex);
           this.updatePickerData(i + 1);
         }
       },
 
-      wheelToIndex(data) {
+      wheelToAnchor(data) {
         this.wheels.forEach((wheel, i) => {
           wheel.wheelTo(data[i] || 0);
         });
@@ -169,6 +215,23 @@
         return value;
       },
 
+      setPickerData() {
+        this.pickerData = this.dataGetter();
+        this.pickerAnchor = this.anchorGetter();
+        if (this.display) {
+          this.$nextTick(() => {
+            const wheelWrapper = this.$refs.wheelWrapper;
+            const length = Math.max(this.wheels.length, this.pickerData.length);
+            for (let i = 0; i < length; i++) {
+              this.createWheel(wheelWrapper, i);
+            }
+            this.wheelToAnchor(this.proxyAnchor);
+          });
+        } else {
+          this.dataChange = true;
+        }
+      },
+
       updatePickerData(wheelIndex = 0) {
         let data = this.proxyData.slice();
         let i = 0;
@@ -179,11 +242,11 @@
               wheelData.push(item.value);
             });
             this.pickerData[i] = wheelData;
-            this.pickerIndex[i] = wheelIndex === 0
-              ? (this.pickerIndex[i] < data.length ? this.pickerIndex[i] || 0 : 0)
+            this.pickerAnchor[i] = wheelIndex === 0
+              ? (this.pickerAnchor[i] < data.length ? this.pickerAnchor[i] || 0 : 0)
               : this.reloadWheel(i, wheelData);
           }
-          data = data.length ? data[this.pickerIndex[i]].children : null;
+          data = data.length ? data[this.pickerAnchor[i]].children : null;
           i++;
         }
         this.pickerData = this.pickerData.slice(0, i);
@@ -196,7 +259,7 @@
         let dist = 0;
         if (scroll && wheel) {
           this.$set(this.pickerData, index, data);
-          this.pickerIndex[index] = dist;
+          this.pickerAnchor[index] = dist;
           this.$nextTick(() => {
             wheel = this.createWheel(wheelWrapper, index)
             wheel.wheelTo(dist)
@@ -233,6 +296,7 @@
 
   .fade-enter-active, .fade-leave-active {
     transition: all .3s ease;
+    transform: translateZ(0);
   }
 
   /* slide */
