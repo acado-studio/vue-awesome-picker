@@ -49,7 +49,6 @@
 </template>
 
 <script>
-
 const data1 = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 const data2 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
@@ -101,14 +100,19 @@ export default {
       },
       picker2: {
         anchor: [],
-        textTitle: '时间选择器(内置)',
+        textTitle: '时间选择器',
         type: 'time'
       },
       picker3: {
         anchor: [],
-        textTitle: '日期选择器(内置)',
+        textTitle: '日期选择器',
         type: 'date'
       },
+      picker4: {
+        anchor: [],
+        textTitle: '区域选择器',
+        type: 'area'
+      }
     }
   },
   methods: {
@@ -143,6 +147,14 @@ export default {
       this.picker3.anchor = v
       this.value = v ? JSON.stringify(v) : null
     },
+
+    showPicker4 () {
+      this.$refs.picker4.show()
+    },
+    handlePicker4Confirm (v) {
+      this.picker4.anchor = v
+      this.value = v ? JSON.stringify(v) : null
+    }
   }
 }
 </script>
