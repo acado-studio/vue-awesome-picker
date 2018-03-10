@@ -8,7 +8,7 @@
     <p class="btn" @click="showPicker4">区域</p>
     <awesome-picker 
       ref="picker0"
-      :title="picker0.title"
+      :textTitle="picker0.textTitle"
       :data="picker0.data"
       :anchor="picker0.anchor"
       @confirm="handlePicker0Confirm">
@@ -16,7 +16,7 @@
 
     <awesome-picker 
       ref="picker1"
-      :title="picker1.title"
+      :textTitle="picker1.textTitle"
       :data="picker1.data"
       :anchor="picker1.anchor"
       @confirm="handlePicker1Confirm">
@@ -24,7 +24,7 @@
 
     <awesome-picker 
       ref="picker2"
-      :title="picker2.title"
+      :textTitle="picker2.textTitle"
       :type="picker2.type"
       :anchor="picker2.anchor"
       @confirm="handlePicker2Confirm">
@@ -32,7 +32,7 @@
 
     <awesome-picker 
       ref="picker3"
-      :title="picker3.title"
+      :textTitle="picker3.textTitle"
       :type="picker3.type"
       :anchor="picker3.anchor"
       @confirm="handlePicker3Confirm">
@@ -40,7 +40,7 @@
 
     <awesome-picker 
       ref="picker4"
-      :title="picker4.title"
+      :textTitle="picker4.textTitle"
       :type="picker4.type"
       :anchor="picker4.anchor"
       @confirm="handlePicker4Confirm">
@@ -51,6 +51,9 @@
 <script>
 import areaData from './lib/data/area';
 
+const data1 = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+const data2 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
 export default {
   name: 'app',
   data () {
@@ -58,15 +61,12 @@ export default {
       value: null,
       picker0: {
         anchor: [],
-        title: '多列选择器',
-        data: [
-          ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
-          ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-        ],
+        textTitle: '多列选择器',
+        data: [data1, data2],
       },
       picker1: {
         anchor: [],
-        title: '联级选择器',
+        textTitle: '联级选择器',
         data: [
           {
             value: 'A',
@@ -102,17 +102,17 @@ export default {
       },
       picker2: {
         anchor: [],
-        title: '时间选择器',
+        textTitle: '时间选择器',
         type: 'time',
       },
       picker3: {
         anchor: [],
-        title: '日期选择器',
+        textTitle: '日期选择器',
         type: 'date',
       },
       picker4: {
         anchor: [],
-        title: '区域选择器',
+        textTitle: '区域选择器',
         type: 'area',        
       },
     }
@@ -157,11 +157,6 @@ export default {
       this.picker4.anchor = v;
       this.value = v ? JSON.stringify(v) : null;
     },
-  },
-  created() {
-    setTimeout(() => {
-      this.picker1.data = [[1,2,3], [4,5,6], [1,2,3]];
-    }, 5000);
   },
 }
 </script>

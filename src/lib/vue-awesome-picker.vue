@@ -6,9 +6,9 @@
     <transition name="slide">
       <div class="picker" v-show="display">
       <div class="picker-title">
-        <span class="pt-cancel" @click="cancel">取消</span>
-        <span class="pt-submit" @click="confirm">确认</span>
-        <h4>{{title}}</h4>
+        <span class="pt-cancel" @click="cancel" :style="{ color: colorCancel }">{{textCancel}}</span>
+        <span class="pt-submit" @click="confirm" :style="{ color: colorConfirm }">{{textConfirm}}</span>
+        <h4 :style="{ color: colorTitle }">{{textTitle}}</h4>
       </div>
       <div class="picker-panel">
         <div class="picker-mask-top"></div>
@@ -40,6 +40,14 @@
   const TYPE_DATE = 'date';
   const TYPE_AREA = 'area';
 
+  const TEXT_TITLE = '';
+  const TEXT_CONFIRM = '确定';
+  const TEXT_CANCEL = '取消';
+
+  const COLOR_TITLE = '#000000';
+  const COLOR_CONFIRM = '#42b983';
+  const COLOR_CANCEL = '#999999';
+
   const EVENT_CONFIRM = 'confirm';
   const EVENT_CANCEL = 'cancel';
 
@@ -62,9 +70,29 @@
         type: String,
         default: TYPE_NORMAL,
       },
-      title: {
+      textTitle: {
         type: String,
-        default: '',
+        default: TEXT_TITLE,
+      },
+      textConfirm: {
+        type: String,
+        default: TEXT_CONFIRM,
+      },
+      textCancel: {
+        type: String,
+        default: TEXT_CANCEL,
+      },
+      colorTitle: {
+        type: String,
+        default: COLOR_TITLE,
+      },
+      colorConfirm: {
+        type: String,
+        default: COLOR_CONFIRM,
+      },
+      colorCancel: {
+        type: String,
+        default: COLOR_CANCEL,
       },
     },
     data () {
@@ -221,11 +249,14 @@
         if (this.display) {
           this.$nextTick(() => {
             const wheelWrapper = this.$refs.wheelWrapper;
-            const length = Math.max(this.wheels.length, this.pickerData.length);
-            for (let i = 0; i < length; i++) {
+            this.pickerData.forEach((item, i) => {
               this.createWheel(wheelWrapper, i);
-            }
+            });
             this.wheelToAnchor(this.proxyAnchor);
+            const extraWheels = this.wheels.splice(this.pickerData.length);
+            extraWheels.forEach((wheel) => {
+              wheel.destroy();
+            });
           });
         } else {
           this.dataChange = true;
@@ -296,7 +327,6 @@
 
   .fade-enter-active, .fade-leave-active {
     transition: all .3s ease;
-    transform: translateZ(0);
   }
 
   /* slide */
