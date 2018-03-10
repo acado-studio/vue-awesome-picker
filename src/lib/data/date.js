@@ -1,23 +1,23 @@
-import range from './range';
+import range from './range'
 
-const START_YEAR= 1900;
-const END_YEAR = 2100;
+const START_YEAR = 1900
+const END_YEAR = 2100
 
-const UNIT_YEAR = '年';
-const UNIT_MONTH = '月';
-const UNIT_DAY = '日';
+const UNIT_YEAR = '年'
+const UNIT_MONTH = '月'
+const UNIT_DAY = '日'
 
-function isLeapYear(y) {
-  return (y % 4 === 0) && (y % 100 !== 0 || y % 400 === 0);
+function isLeapYear (y) {
+  return (y % 4 === 0) && (y % 100 !== 0 || y % 400 === 0)
 };
 
-function getDays(y, m) {
-  y = Number(y);
-  m = Number(m);
-  let endDay = null;
-  switch(m) {
+function getDays (y, m) {
+  y = Number(y)
+  m = Number(m)
+  let endDay = null
+  switch (m) {
     case 2:
-      endDay = isLeapYear(y) ? 29 : 28; break;
+      endDay = isLeapYear(y) ? 29 : 28; break
     case 1:
     case 3:
     case 5:
@@ -25,49 +25,49 @@ function getDays(y, m) {
     case 8:
     case 10:
     case 12:
-      endDay = 31; break;
+      endDay = 31; break
     case 4:
     case 6:
     case 9:
     case 11:
     default:
-      endDay = 30; break;
+      endDay = 30; break
   }
-  const days = range(1, endDay, false, UNIT_DAY);
+  const days = range(1, endDay, false, UNIT_DAY)
   return days.map((day) => {
-    return { value: day };
-  });
+    return { value: day }
+  })
 };
 
-const yearData = range(START_YEAR, END_YEAR, false, UNIT_YEAR);
-const monthData = range(1, 12, false, UNIT_MONTH);
+const yearData = range(START_YEAR, END_YEAR, false, UNIT_YEAR)
+const monthData = range(1, 12, false, UNIT_MONTH)
 
 const cascadeMonthData = monthData.map((month) => {
   return {
     value: month,
-    children: [],
-  };
-});
+    children: []
+  }
+})
 
 const dateData = yearData.map((year) => {
   const item = {
     value: year,
-    children: cascadeMonthData.slice(),
-  };
+    children: cascadeMonthData.slice()
+  }
   item.children.forEach((month) => {
-    month.children = getDays(year.slice(0, -1), month.value.slice(0, -1));
-  });
-  return item;
-});
+    month.children = getDays(year.slice(0, -1), month.value.slice(0, -1))
+  })
+  return item
+})
 
-const date = new Date();
+const date = new Date()
 const dateAnchor = [
   { value: `${date.getFullYear()}${UNIT_YEAR}` },
-  { value: `${date.getMonth() + 1}${UNIT_MONTH}`},
-  { value: `${date.getDate()}${UNIT_DAY}` },
-];
+  { value: `${date.getMonth() + 1}${UNIT_MONTH}` },
+  { value: `${date.getDate()}${UNIT_DAY}` }
+]
 
 export {
   dateAnchor,
-  dateData,
-};
+  dateData
+}

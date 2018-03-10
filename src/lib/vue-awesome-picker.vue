@@ -27,296 +27,296 @@
 </template>
 
 <script>
-  import BScroll from 'better-scroll';
-  import timeData from './data/time.js';
-  import areaData from './data/area.js';
-  import { dateData, dateAnchor } from './data/date.js';
+import BScroll from 'better-scroll'
+import timeData from './data/time.js'
+import areaData from './data/area.js'
+import { dateData, dateAnchor } from './data/date.js'
 
-  const DATA_NORMAL = 'normal';
-  const DATA_CASCADE = 'cascade';
+const DATA_NORMAL = 'normal'
+const DATA_CASCADE = 'cascade'
 
-  const TYPE_NORMAL = 'normal';
-  const TYPE_TIME = 'time';
-  const TYPE_DATE = 'date';
-  const TYPE_AREA = 'area';
+const TYPE_NORMAL = 'normal'
+const TYPE_TIME = 'time'
+const TYPE_DATE = 'date'
+const TYPE_AREA = 'area'
 
-  const TEXT_TITLE = '';
-  const TEXT_CONFIRM = '确定';
-  const TEXT_CANCEL = '取消';
+const TEXT_TITLE = ''
+const TEXT_CONFIRM = '确定'
+const TEXT_CANCEL = '取消'
 
-  const COLOR_TITLE = '#000000';
-  const COLOR_CONFIRM = '#42b983';
-  const COLOR_CANCEL = '#999999';
+const COLOR_TITLE = '#000000'
+const COLOR_CONFIRM = '#42b983'
+const COLOR_CANCEL = '#999999'
 
-  const EVENT_CONFIRM = 'confirm';
-  const EVENT_CANCEL = 'cancel';
+const EVENT_CONFIRM = 'confirm'
+const EVENT_CANCEL = 'cancel'
 
-  export default {
-    name: 'awesome-picker',
-    props: {
-      data: {
-        type: Array,
-        default() {
-          return [];
-        },
-      },
-      anchor: {
-        type: Array,
-        default() {
-          return [];
-        },
-      },
-      type: {
-        type: String,
-        default: TYPE_NORMAL,
-      },
-      textTitle: {
-        type: String,
-        default: TEXT_TITLE,
-      },
-      textConfirm: {
-        type: String,
-        default: TEXT_CONFIRM,
-      },
-      textCancel: {
-        type: String,
-        default: TEXT_CANCEL,
-      },
-      colorTitle: {
-        type: String,
-        default: COLOR_TITLE,
-      },
-      colorConfirm: {
-        type: String,
-        default: COLOR_CONFIRM,
-      },
-      colorCancel: {
-        type: String,
-        default: COLOR_CANCEL,
-      },
-    },
-    data () {
-      return {
-        display: false,
-        dataChange: false,
-        pickerData: this.dataGetter(),
-        pickerAnchor: this.anchorGetter(),
-        wheels: [],
+export default {
+  name: 'awesome-picker',
+  props: {
+    data: {
+      type: Array,
+      default () {
+        return []
       }
     },
-    watch: {
-      data() {
-        this.setPickerData();
-      },
+    anchor: {
+      type: Array,
+      default () {
+        return []
+      }
     },
-    computed: {
-      proxyData() {
-        return this.dataGetter();
-      },
-      proxyAnchor() {
-        return this.anchorGetter();
-      },
-      dataType() {
-        return !Array.isArray(this.proxyData[0]) ? DATA_CASCADE : DATA_NORMAL;
-      },
+    type: {
+      type: String,
+      default: TYPE_NORMAL
     },
-    methods: {
-      dataGetter() {
-        let data = null;
+    textTitle: {
+      type: String,
+      default: TEXT_TITLE
+    },
+    textConfirm: {
+      type: String,
+      default: TEXT_CONFIRM
+    },
+    textCancel: {
+      type: String,
+      default: TEXT_CANCEL
+    },
+    colorTitle: {
+      type: String,
+      default: COLOR_TITLE
+    },
+    colorConfirm: {
+      type: String,
+      default: COLOR_CONFIRM
+    },
+    colorCancel: {
+      type: String,
+      default: COLOR_CANCEL
+    }
+  },
+  data () {
+    return {
+      display: false,
+      dataChange: false,
+      pickerData: this.dataGetter(),
+      pickerAnchor: this.anchorGetter(),
+      wheels: []
+    }
+  },
+  watch: {
+    data () {
+      this.setPickerData()
+    }
+  },
+  computed: {
+    proxyData () {
+      return this.dataGetter()
+    },
+    proxyAnchor () {
+      return this.anchorGetter()
+    },
+    dataType () {
+      return !Array.isArray(this.proxyData[0]) ? DATA_CASCADE : DATA_NORMAL
+    }
+  },
+  methods: {
+    dataGetter () {
+      let data = null
+      switch (this.type) {
+        case TYPE_TIME:
+          data = timeData; break
+        case TYPE_DATE:
+          data = dateData; break
+        case TYPE_AREA:
+          data = areaData; break
+        case TYPE_NORMAL:
+        default:
+          data = this.data; break
+      }
+      return data.slice()
+    },
+
+    anchorGetter () {
+      let anchor = []
+      if (this.anchor.length) {
+        anchor = this.anchor
+      } else {
         switch (this.type) {
-          case TYPE_TIME:
-            data = timeData; break;
           case TYPE_DATE:
-            data = dateData; break;
-          case TYPE_AREA:
-            data = areaData; break;
-          case TYPE_NORMAL:
+            anchor = dateAnchor; break
           default:
-            data = this.data; break;
+            anchor = this.anchor; break
         }
-        return data.slice();
-      },
+      }
 
-      anchorGetter() {
-        let anchor = [];
-        if (this.anchor.length) {
-          anchor = this.anchor;
-        } else {
-          switch (this.type) {
-            case TYPE_DATE:
-              anchor = dateAnchor; break;
-            default:
-              anchor = this.anchor; break;
-          }
+      anchor = anchor.map((item, i) => {
+        let index = 0
+        if (item.index) {
+          index = item.index
+        } else if (item.value) {
+          index = this.pickerData && this.pickerData[i] && this.pickerData[i].indexOf(item.value) > -1
+            ? this.pickerData[i].indexOf(item.value) : 0
         }
-
-        anchor = anchor.map((item, i) => {
-          let index = 0;
-          if (item.index) {
-            index = item.index;
-          } else if (item.value) {
-            index = this.pickerData && this.pickerData[i] && this.pickerData[i].indexOf(item.value) > -1 
-              ? this.pickerData[i].indexOf(item.value) : 0;
-          }
-          return index;
-        });
-        return anchor.slice();
-      },
-
-      show() {
-        this.display = true;
-
-        if (!this.wheels || !this.wheels.length || this.dataChange) {
-          this.dataChange = false;
-          this.initPicker();
-          this.dataType === DATA_CASCADE && this.updatePickerData();
-        } else {
-          this.wheels.forEach((wheel) => {
-            wheel.enable();
-          });
-        }
-      },
-
-      hide() {
-        this.wheels.forEach((wheel) => {
-          wheel.disable();
-        });
-        this.display = false;
-      },
-
-      initPicker() {
-        this.wheels = [];
-        this.$nextTick(() => {
-          const wheelWrapper = this.$refs.wheelWrapper;
-          this.pickerData.forEach((item, index) => {
-            this.createWheel(wheelWrapper, index);
-          });
-          this.wheelToAnchor(this.proxyAnchor);
-        });
-      },
-
-      createWheel(wheelWrapper, i) {
-        if (!this.wheels[i]) {
-          const wheel = this.wheels[i] = new BScroll(wheelWrapper.children[i], {
-            wheel: {
-              selectedIndex: 0,
-              rotate: 25,
-            },
-            bounceTime: 500,
-            swipeTime: 1800,
-          });
-          wheel.on('scrollEnd', () => {
-            this.cascadePickerChange(i);
-          });
-        } else {
-          this.wheels[i].refresh();
-        }
-        return this.wheels[i];
-      },
-
-      cascadePickerChange(i) {
-        if (this.dataType !== DATA_CASCADE) {
-          return
-        }
-        const newIndex = this.getCurrentValue()[i].index;
-        if (newIndex !== this.pickerAnchor[i]) {
-          this.pickerAnchor.splice(i, 1, newIndex);
-          this.updatePickerData(i + 1);
-        }
-      },
-
-      wheelToAnchor(data) {
-        this.wheels.forEach((wheel, i) => {
-          wheel.wheelTo(data[i] || 0);
-        });
-      },
-
-      getCurrentValue() {
-        const value = [];
-        this.wheels.forEach((wheel, i) => {
-          const j = wheel.getSelectedIndex();
-          value.push({
-            index: j, 
-            value: this.pickerData[i][j],
-          });
-        });
-        return value;
-      },
-
-      setPickerData() {
-        this.pickerData = this.dataGetter();
-        this.pickerAnchor = this.anchorGetter();
-        if (this.display) {
-          this.$nextTick(() => {
-            const wheelWrapper = this.$refs.wheelWrapper;
-            this.pickerData.forEach((item, i) => {
-              this.createWheel(wheelWrapper, i);
-            });
-            this.wheelToAnchor(this.proxyAnchor);
-            const extraWheels = this.wheels.splice(this.pickerData.length);
-            extraWheels.forEach((wheel) => {
-              wheel.destroy();
-            });
-          });
-        } else {
-          this.dataChange = true;
-        }
-      },
-
-      updatePickerData(wheelIndex = 0) {
-        let data = this.proxyData.slice();
-        let i = 0;
-        while(data) {
-          if (i >= wheelIndex) {
-            let wheelData = [];
-            data.forEach((item) => {
-              wheelData.push(item.value);
-            });
-            this.pickerData[i] = wheelData;
-            this.pickerAnchor[i] = wheelIndex === 0
-              ? (this.pickerAnchor[i] < data.length ? this.pickerAnchor[i] || 0 : 0)
-              : this.reloadWheel(i, wheelData);
-          }
-          data = data.length ? data[this.pickerAnchor[i]].children : null;
-          i++;
-        }
-        this.pickerData = this.pickerData.slice(0, i);
-      },
-
-      reloadWheel(index, data) {
-        const wheelWrapper = this.$refs.wheelWrapper;
-        let scroll = wheelWrapper.children[index].querySelector('.wheel-scroll');
-        let wheel = this.wheels ? this.wheels[index] : false;
-        let dist = 0;
-        if (scroll && wheel) {
-          this.$set(this.pickerData, index, data);
-          this.pickerAnchor[index] = dist;
-          this.$nextTick(() => {
-            wheel = this.createWheel(wheelWrapper, index)
-            wheel.wheelTo(dist)
-          })
-        }
-        return dist;
-      },
-
-      confirm() {
-        const isInTransition = this.wheels.some((wheel) => {
-          return wheel.isInTransition;
-        });
-        if (isInTransition) {
-          return;
-        }
-        const selectedValues = this.getCurrentValue();
-        this.$emit(EVENT_CONFIRM, selectedValues);
-        this.hide();
-      },
-
-      cancel() {
-        this.$emit(EVENT_CANCEL);
-        this.hide();
-      },
+        return index
+      })
+      return anchor.slice()
     },
+
+    show () {
+      this.display = true
+
+      if (!this.wheels || !this.wheels.length || this.dataChange) {
+        this.dataChange = false
+        this.initPicker()
+        this.dataType === DATA_CASCADE && this.updatePickerData()
+      } else {
+        this.wheels.forEach((wheel) => {
+          wheel.enable()
+        })
+      }
+    },
+
+    hide () {
+      this.wheels.forEach((wheel) => {
+        wheel.disable()
+      })
+      this.display = false
+    },
+
+    initPicker () {
+      this.wheels = []
+      this.$nextTick(() => {
+        const wheelWrapper = this.$refs.wheelWrapper
+        this.pickerData.forEach((item, index) => {
+          this.createWheel(wheelWrapper, index)
+        })
+        this.wheelToAnchor(this.proxyAnchor)
+      })
+    },
+
+    createWheel (wheelWrapper, i) {
+      if (!this.wheels[i]) {
+        const wheel = this.wheels[i] = new BScroll(wheelWrapper.children[i], {
+          wheel: {
+            selectedIndex: 0,
+            rotate: 25
+          },
+          bounceTime: 500,
+          swipeTime: 1800
+        })
+        wheel.on('scrollEnd', () => {
+          this.cascadePickerChange(i)
+        })
+      } else {
+        this.wheels[i].refresh()
+      }
+      return this.wheels[i]
+    },
+
+    cascadePickerChange (i) {
+      if (this.dataType !== DATA_CASCADE) {
+        return
+      }
+      const newIndex = this.getCurrentValue()[i].index
+      if (newIndex !== this.pickerAnchor[i]) {
+        this.pickerAnchor.splice(i, 1, newIndex)
+        this.updatePickerData(i + 1)
+      }
+    },
+
+    wheelToAnchor (data) {
+      this.wheels.forEach((wheel, i) => {
+        wheel.wheelTo(data[i] || 0)
+      })
+    },
+
+    getCurrentValue () {
+      const value = []
+      this.wheels.forEach((wheel, i) => {
+        const j = wheel.getSelectedIndex()
+        value.push({
+          index: j,
+          value: this.pickerData[i][j]
+        })
+      })
+      return value
+    },
+
+    setPickerData () {
+      this.pickerData = this.dataGetter()
+      this.pickerAnchor = this.anchorGetter()
+      if (this.display) {
+        this.$nextTick(() => {
+          const wheelWrapper = this.$refs.wheelWrapper
+          this.pickerData.forEach((item, i) => {
+            this.createWheel(wheelWrapper, i)
+          })
+          this.wheelToAnchor(this.proxyAnchor)
+          const extraWheels = this.wheels.splice(this.pickerData.length)
+          extraWheels.forEach((wheel) => {
+            wheel.destroy()
+          })
+        })
+      } else {
+        this.dataChange = true
+      }
+    },
+
+    updatePickerData (wheelIndex = 0) {
+      let data = this.proxyData.slice()
+      let i = 0
+      while (data) {
+        if (i >= wheelIndex) {
+          let wheelData = []
+          data.forEach((item) => {
+            wheelData.push(item.value)
+          })
+          this.pickerData[i] = wheelData
+          this.pickerAnchor[i] = wheelIndex === 0
+            ? (this.pickerAnchor[i] < data.length ? this.pickerAnchor[i] || 0 : 0)
+            : this.reloadWheel(i, wheelData)
+        }
+        data = data.length ? data[this.pickerAnchor[i]].children : null
+        i++
+      }
+      this.pickerData = this.pickerData.slice(0, i)
+    },
+
+    reloadWheel (index, data) {
+      const wheelWrapper = this.$refs.wheelWrapper
+      let scroll = wheelWrapper.children[index].querySelector('.wheel-scroll')
+      let wheel = this.wheels ? this.wheels[index] : false
+      let dist = 0
+      if (scroll && wheel) {
+        this.$set(this.pickerData, index, data)
+        this.pickerAnchor[index] = dist
+        this.$nextTick(() => {
+          wheel = this.createWheel(wheelWrapper, index)
+          wheel.wheelTo(dist)
+        })
+      }
+      return dist
+    },
+
+    confirm () {
+      const isInTransition = this.wheels.some((wheel) => {
+        return wheel.isInTransition
+      })
+      if (isInTransition) {
+        return
+      }
+      const selectedValues = this.getCurrentValue()
+      this.$emit(EVENT_CONFIRM, selectedValues)
+      this.hide()
+    },
+
+    cancel () {
+      this.$emit(EVENT_CANCEL)
+      this.hide()
+    }
   }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -376,7 +376,7 @@
       position: absolute;
       height: 44px;
       line-height: 44px;
-      padding: 0 12px;    
+      padding: 0 12px;
       font-size: 14px;
     }
 
