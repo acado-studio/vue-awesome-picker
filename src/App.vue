@@ -3,9 +3,9 @@
     <textarea v-model="value"></textarea>
     <p class="btn" @click="showPicker0">多列</p>
     <p class="btn" @click="showPicker1">联级</p>
-    <p class="btn" @click="showPicker2">时间</p>
-    <p class="btn" @click="showPicker3">日期</p>
     <p class="btn" @click="showPicker4">区域</p>
+    <p class="btn" @click="showPicker2">时间(内置)</p>
+    <p class="btn" @click="showPicker3">日期(内置)</p>
     <awesome-picker
       ref="picker0"
       :textTitle="picker0.textTitle"
@@ -41,7 +41,7 @@
     <awesome-picker
       ref="picker4"
       :textTitle="picker4.textTitle"
-      :type="picker4.type"
+      :data="picker4.data"
       :anchor="picker4.anchor"
       @confirm="handlePicker4Confirm">
     </awesome-picker>
@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import areaData from './area.js'
+
 const data1 = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 const data2 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
@@ -100,18 +102,18 @@ export default {
       },
       picker2: {
         anchor: [],
-        textTitle: '时间选择器',
+        textTitle: '时间选择器(内置)',
         type: 'time'
       },
       picker3: {
         anchor: [],
-        textTitle: '日期选择器',
+        textTitle: '日期选择器(内置)',
         type: 'date'
       },
       picker4: {
         anchor: [],
         textTitle: '区域选择器',
-        type: 'area'
+        data: areaData
       }
     }
   },

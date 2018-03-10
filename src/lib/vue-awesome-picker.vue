@@ -29,7 +29,6 @@
 <script>
 import BScroll from 'better-scroll'
 import timeData from './data/time.js'
-import areaData from './data/area.js'
 import { dateData, dateAnchor } from './data/date.js'
 
 const DATA_NORMAL = 'normal'
@@ -38,7 +37,6 @@ const DATA_CASCADE = 'cascade'
 const TYPE_NORMAL = 'normal'
 const TYPE_TIME = 'time'
 const TYPE_DATE = 'date'
-const TYPE_AREA = 'area'
 
 const TEXT_TITLE = ''
 const TEXT_CONFIRM = '确定'
@@ -128,8 +126,6 @@ export default {
           data = timeData; break
         case TYPE_DATE:
           data = dateData; break
-        case TYPE_AREA:
-          data = areaData; break
         case TYPE_NORMAL:
         default:
           data = this.data; break
