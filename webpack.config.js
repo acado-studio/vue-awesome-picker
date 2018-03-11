@@ -6,7 +6,7 @@ module.exports = {
   // entry: './src/lib/index.js', // npm
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
+    publicPath: './dist/',
     filename: 'vue-awesome-picker.js',
     library: 'VueAwesomePicker',
     libraryTarget: 'umd',
