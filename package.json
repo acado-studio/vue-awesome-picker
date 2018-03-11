@@ -1,7 +1,7 @@
 {
   "name": "vue-awesome-picker",
-  "description": "Vue.js Picker Component",
-  "version": "1.0.0",
+  "description": "A Vue.js Picker Component",
+  "version": "1.0.1",
   "author": "Fyerl <fyerl@foxmail.com>",
   "license": "MIT",
   "private": false,
@@ -11,12 +11,12 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "lint": "eslint --ext .js,.vue src"
   },
-  "repository": { 
-    "type": "git", 
+  "repository": {
+    "type": "git",
     "url": "https://github.com/fyerl/vue-awesome-picker"
   },
   "dependencies": {
-    "better-scroll": "^1.8.1",
+    "better-scroll": "^1.8.4",
     "reset-css": "^2.2.1",
     "vue": "^2.5.11"
   },
