@@ -26,54 +26,54 @@
 ### data
 >vue-awesome-picker 通过数据结构不同来区分是普通 picker 还是联级 picker, 所以请严格按照以下数据结构进行配置
 
-* 单列、多列 picker 以双层数组的形式传入 data
-  ``` javascript
-  [
-    ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's','t', 'u', 'v', 'w', 'x', 'y', 'z'],
-    ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S','T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-  ]
-  ```
+单列、多列 picker 以双层数组的形式传入 data
+``` javascript
+[
+  ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's','t', 'u', 'v', 'w', 'x', 'y', 'z'],
+  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S','T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+]
+```
 
-* 联级 picker 通过 children 构造出具有层级关系的数据
-  ```javascript
-  [
-    {
-      value: 'A',
-      children: [
-        { value: 'A-a' },
-        { value: 'A-b' },
-        { value: 'A-c' }
-      ]
-    },
-    {
-      value: 'B',
-      children: [
-        { value: 'B-a' },
-        { value: 'B-b' }
-      ]
-    },
-  ]
-  ```
+联级 picker 通过 children 构造出具有层级关系的数据
+```javascript
+[
+  {
+    value: 'A',
+    children: [
+      { value: 'A-a' },
+      { value: 'A-b' },
+      { value: 'A-c' }
+    ]
+  },
+  {
+    value: 'B',
+    children: [
+      { value: 'B-a' },
+      { value: 'B-b' }
+    ]
+  },
+]
+```
 ### anchor
 >anchor 是 picker 展开时每一列默认滚动的锚点位置或值的数组, 兼容两种数据结构, 未匹配到默认选中第0项
 
-* [推荐]数组对象形式: 与事件 confirm 返回的参数数据结构相同, 对象里可以只存在 index 或 value, 当存在 index 时优先匹配 index
-  ```javascript
-  [
-    { 
-      index: 0,
-      value: 'A'
-    },
-    {
-      index: 0,
-      value: 'A-a'
-    } 
-  ]
-  ```
-* 单层数组形式: index 组成的数组
-  ```javascript
-  [0, 0]
-  ```
+[推荐]数组对象形式: 与事件 confirm 返回的参数数据结构相同, 对象里可以只存在 index 或 value, 当存在 index 时优先匹配 index
+```javascript
+[
+  { 
+    index: 0,
+    value: 'A'
+  },
+  {
+    index: 0,
+    value: 'A-a'
+  } 
+]
+```
+单层数组形式: index 组成的数组
+```javascript
+[0, 0]
+```
 
 ## Events
 | 事件 | 描述 | 参数
