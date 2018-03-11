@@ -2,17 +2,17 @@
 
 > 基于 [Vue.js](https://github.com/vuejs/vue) & [Better-Scroll](https://github.com/ustbhuangyi/better-scroll) 的移动端 picker 组件
 
-###Features
+### Features
 * 支持单列、多列和联级数据
 * 内置时间、日期数据
 * 滚轮 3D 效果
 * 颜色可配置
 
 ### DEMO
-<img src="./static/img/qr-code.png" style="width: 250px">
+![](./static/img/qr-code.png)
 
 ### Options
-| 字段 | 描述 | 可选 | 类型 | 默认
+| 字段 | 描述 | 可选 | 类型 | 默认
 | ----- | ----- | ----- | ----- | ----- |
 | anchor | 滚轮滚动锚点 || Array | [0, 0...] (选中每列第0项)
 | type | 内置 picker 类型, 无需传入 data | date, time | String |
@@ -24,9 +24,9 @@
 | colorCancel | cancel 颜色 || String | #999999
 
 ### Events
-| 名称 | 描述 | 参数
+| 名称 | 描述 | 参数
 | ----- | ----- | -----
-| confirm | 点击 confirm 按钮后触发 | [{ index: xxx, value: xxx }...] <br> index: 当前选中的 item 在当列的 index <br> value: 当前选中 item 的 value
+| confirm | 点击 confirm 按钮后触发 | [{ index: xxx, value: xxx }...] <br> index: 当前选中的 item 在当列的 index <br> value: 当前选中 item 的 value
 | cancel | 点击 cancel 按钮后触发 |
 
 ### Development
