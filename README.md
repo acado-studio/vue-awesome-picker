@@ -12,10 +12,61 @@
 ![](./static/img/qr-code.png)
 
 ### Options
-| 字段 | 描述 | 可选 | 类型 | 默认
+#### data
+单列、多列 picker 以双层数组的形式传入 data
+``` javascript
+[
+  ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
+  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+]
+```
+
+
+联级 picker 通过 children 构造出具有层级关系的数据
+```javascript
+[
+  {
+    value: 'A',
+    children: [
+      { value: 'A-a' },
+      { value: 'A-b' },
+      { value: 'A-c' }
+    ]
+  },
+  {
+    value: 'B',
+    children: [
+      { value: 'B-a' },
+      { value: 'B-b' }
+    ]
+  },
+]
+```
+#### anchor
+当 picker 展开时, 默认滚动的锚点位置, 未设置或未匹配成功默认选中第 0 项, 兼容两种数据结构如下:
+1. 与事件 confirm 返回的参数数据结构相同 当存在 index 时优先匹配 index
+```javascript
+[
+  { 
+    index: 0,
+    value: 'A'
+  },
+  {
+    index: 0,
+    value: 'A-a'
+  } 
+]
+```
+2. index 组成的数组
+```javascript
+[0, 0]
+```
+
+
+##### 其他参数
+| 参数 | 描述 | 可选 | 类型 | 默认
 | ----- | ----- | ----- | ----- | ----- |
-| anchor | 滚轮滚动锚点 || Array | [0, 0...] (选中每列第0项)
-| type | 内置 picker 类型, 无需传入 data | date, time | String |
+| type | 内置 picker 类型<br>无需传入 data | date, time | String |
 | textTitle | title 文案 || String |
 | textConfirm | confirm 文案 || String | 确定
 | textCancel | cancel 文案 || String | 取消
@@ -24,7 +75,7 @@
 | colorCancel | cancel 颜色 || String | #999999
 
 ### Events
-| 名称 | 描述 | 参数
+| 事件 | 描述 | 参数
 | ----- | ----- | -----
 | confirm | 点击 confirm 按钮后触发 | [{ index: xxx, value: xxx }...] <br> index: 当前选中的 item 在当列的 index <br> value: 当前选中 item 的 value
 | cancel | 点击 cancel 按钮后触发 |
