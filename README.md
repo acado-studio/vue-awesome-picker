@@ -1,4 +1,4 @@
-# vue-awesome-picker
+# vue-awesome-picker [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url]
 
 > A Vue.js project
 
@@ -15,4 +15,7 @@ npm run dev
 npm run build
 ```
 
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+[npm-image]: https://img.shields.io/npm/v/vue-awesome-picker.svg?style=flat
+[npm-url]: https://npmjs.org/package/vue-awesome-picker
+[downloads-image]: https://img.shields.io/npm/dm/vue-awesome.svg?style=flat
+[downloads-url]: https://npmjs.org/package/vue-awesome-picker
