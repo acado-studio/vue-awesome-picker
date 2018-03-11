@@ -17,5 +17,5 @@ npm run build
 
 [npm-image]: https://img.shields.io/npm/v/vue-awesome-picker.svg?style=flat
 [npm-url]: https://npmjs.org/package/vue-awesome-picker
-[downloads-image]: https://img.shields.io/npm/dm/vue-awesome.svg?style=flat
+[downloads-image]: https://img.shields.io/npm/dt/vue-awesome-picker.svg?style=flat
 [downloads-url]: https://npmjs.org/package/vue-awesome-picker
