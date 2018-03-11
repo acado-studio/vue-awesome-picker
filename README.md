@@ -1,6 +1,9 @@
 # vue-awesome-picker [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url]
 
-> A Vue.js project
+> 基于 Vuejs & Better-Scroll 的 picker 组件
+
+## DEMO
+![]('https://fyerl.github.io/vue-awesome-picker/static/img/qr-code.png')
 
 ## Build Setup
 
