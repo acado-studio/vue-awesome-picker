@@ -12,8 +12,20 @@
 ![](./static/img/qr-code.png)
 
 ### Options
+| 参数 | 描述 | 可选 | 类型 | 默认
+| ----- | ----- | ----- | ----- | ----- |
+| data | 详细描述见下文 || Array |
+| anchor | 详细描述见下文 || Array |
+| type | 内置 picker 类型<br>无需传入 data | date, time | String |
+| textTitle | title 文案 || String |
+| textConfirm | confirm 文案 || String | 确定
+| textCancel | cancel 文案 || String | 取消
+| colorTitle | title 颜色 || String | #000000
+| colorConfirm | confirm 颜色 || String | #42b983
+| colorCancel | cancel 颜色 || String | #999999
+
 #### data
-单列、多列 picker 以双层数组的形式传入 data
+单列、多列 picker 以双层数组的形式传入 data
 ``` javascript
 [
   ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'],
@@ -43,8 +55,8 @@
 ]
 ```
 #### anchor
-当 picker 展开时, 默认滚动的锚点位置, 未设置或未匹配成功默认选中第 0 项, 兼容两种数据结构如下:
-1. 与事件 confirm 返回的参数数据结构相同 当存在 index 时优先匹配 index
+当 picker 展开时, 默认滚动的锚点位置, 未设置或未匹配成功默认选中第 0 项, 兼容两种数据结构
+1. 与事件 confirm 返回的参数数据结构相同, 当存在 index 时优先匹配 index
 ```javascript
 [
   { 
@@ -61,18 +73,6 @@
 ```javascript
 [0, 0]
 ```
-
-
-##### 其他参数
-| 参数 | 描述 | 可选 | 类型 | 默认
-| ----- | ----- | ----- | ----- | ----- |
-| type | 内置 picker 类型<br>无需传入 data | date, time | String |
-| textTitle | title 文案 || String |
-| textConfirm | confirm 文案 || String | 确定
-| textCancel | cancel 文案 || String | 取消
-| colorTitle | title 颜色 || String | #000000
-| colorConfirm | confirm 颜色 || String | #42b983
-| colorCancel | cancel 颜色 || String | #999999
 
 ### Events
 | 事件 | 描述 | 参数
