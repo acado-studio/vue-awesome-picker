@@ -1,5 +1,4 @@
-# vue-awesome-picker 
-[![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url]
+# vue-awesome-picker [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url]
 基于 [Vue.js](https://github.com/vuejs/vue) & [Better-Scroll](https://github.com/ustbhuangyi/better-scroll) 的移动端 picker 组件
 
 ## Features
@@ -16,7 +15,7 @@
 | ----- | ----- | ----- | ----- | ----- |
 | data | 详细描述见下文 || Array |
 | anchor | 详细描述见下文 || Array |
-| type | 内置 picker 类型<br>无需传入 data | date, time | String |
+| type | 内置 picker 类型<br>无需传入 data | date, time | String |
 | textTitle | title 文案 || String |
 | textConfirm | confirm 文案 || String | 确定
 | textCancel | cancel 文案 || String | 取消
@@ -24,7 +23,7 @@
 | colorConfirm | confirm 颜色 || String | #42b983
 | colorCancel | cancel 颜色 || String | #999999
 
-## data
+### data
 >vue-awesome-picker 通过数据结构不同来区分是普通 picker 还是联级 picker, 所以请严格按照以下数据结构进行配置
 
 单列、多列 picker 以双层数组的形式传入 data
@@ -55,10 +54,10 @@
   },
 ]
 ```
-#### anchor
+### anchor
 >anchor 是 picker 展开时每一列默认滚动的锚点位置或值的数组, 兼容两种数据结构, 未匹配到默认选中第0项
 
-数组对象形式: 与事件 confirm 返回的参数数据结构相同, 对象里可以只存在 index 或 value, 当存在 index 时优先匹配 index
+数组对象形式: 与事件 confirm 返回的参数数据结构相同, 对象里可以只存在 index 或 value, 当存在 index 时优先匹配 index
 ```javascript
 [
   { 
