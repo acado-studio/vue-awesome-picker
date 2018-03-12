@@ -7,7 +7,7 @@
 * 滚轮 3D 效果
 * 颜色可配置
 
-## DEMO
+## Demo
 ![](./static/img/qr-code.png)
 
 ## Options
@@ -80,6 +80,8 @@
 | ----- | ----- | -----
 | confirm | 点击 confirm 按钮后触发 | [{ index: xxx, value: xxx }...] <br> index: 当前选中的 item 在当列的 index <br> value: 当前选中 item 的 value
 | cancel | 点击 cancel 按钮后触发 |
+
+## Usage
 
 ## Development
 
