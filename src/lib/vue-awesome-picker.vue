@@ -360,6 +360,7 @@ export default {
   .picker-title {
     position: relative;
     height: 44px;
+    color: #333;
 
     &:after {
       content: '';
@@ -390,6 +391,7 @@ export default {
 
     h4 {
       margin: 0;
+      font-size: 16px;
       height: 44px;
       line-height: 44px;
       text-align: center;
@@ -462,11 +464,12 @@ export default {
       .wheel-item {
         height: 34px;
         line-height: 34px;
-        font-size: 18px;
+        font-size: 17px;
         text-align: center;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        color: #333;
       }
     }
   }
