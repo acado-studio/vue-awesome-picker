@@ -10,6 +10,41 @@
 ## Demo
 ![](./static/img/qr-code.png)
 
+## Installation
+``` bash
+npm install vue-awesome-picker --save
+```
+
+## Usage
+``` javascript
+/* main.js */
+import AwesomePicker from 'vue-awesome-picker';
+Vue.use(AwesomePicker);
+```
+``` javascript
+/* 详细使用方法参照源码 App.vue */
+<awesome-picker
+  ref="picker"
+  :data="picker.data"
+  :anchor="picker.anchor"
+  :textTitle="picker.textTitle"
+  :textConfirm="picker.textConfirm"
+  :textCancel="picker.textCancel"
+  :colorTitle="picker.colorTitle"
+  :colorConfirm="picker.colorConfirm"
+  :colorCancel="picker.colorCancel"
+  @cancel="handlePickerCancel"
+  @confirm="handlePickerConfirm">
+</awesome-picker>
+```
+``` javascript
+methods: {
+  show() {
+    this.$ref.picker.show();
+  }
+}
+```
+
 ## Props
 
 | 参数 | 描述 | 可选 | 类型 | 默认
@@ -79,7 +114,7 @@
 ## Methods
 | 方法 | 描述 |
 | ----- | ----- |
-| show | 展开显示 picker | 
+| show | 展开显示 picker | 
 
 ## Events
 | 事件 | 描述 | 参数
@@ -87,40 +122,6 @@
 | confirm | 点击 confirm 按钮后触发 | [{ index: xxx, value: xxx }...] <br> index: 当前选中的 item 在当列的 index <br> value: 当前选中 item 的 value
 | cancel | 点击 cancel 按钮后触发 |
 
-## Installation
-``` bash
-npm install vue-awesome-picker --save
-```
-
-## Usage
-``` javascript
-/* main.js */
-import AwesomePicker from 'vue-awesome-picker';
-Vue.use(AwesomePicker);
-```
-``` javascript
-/* 详细使用方法参照源码 App.vue */
-<awesome-picker
-  ref="picker"
-  :data="picker.data"
-  :anchor="picker.anchor"
-  :textTitle="picker.textTitle"
-  :textConfirm="picker.textConfirm"
-  :textCancel="picker.textCancel"
-  :colorTitle="picker.colorTitle"
-  :colorConfirm="picker.colorConfirm"
-  :colorCancel="picker.colorCancel"
-  @cancel="handlePickerCancel"
-  @confirm="handlePickerConfirm">
-</awesome-picker>
-```
-``` javascript
-methods: {
-  show() {
-    this.$ref.picker.show();
-  }
-}
-```
 ## Development
 
 ``` bash
