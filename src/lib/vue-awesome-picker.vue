@@ -392,6 +392,7 @@ export default {
     h4 {
       margin: 0;
       font-size: 16px;
+      font-weight: normal;
       height: 44px;
       line-height: 44px;
       text-align: center;
