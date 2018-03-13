@@ -10,7 +10,7 @@
   <body>
     <div id="app"></div>
     <script>
-      navigator.serviceWorker && navigator.serviceWorker.register('sw.js').then((registration) => {
+      navigator.serviceWorker && navigator.serviceWorker.register('./sw.js').then((registration) => {
         console.log('Registered events at scope: ', registration.scope);
       });
     </script>

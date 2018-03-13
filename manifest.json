@@ -10,11 +10,6 @@
       "src": "./static/img/vue-logo.png",
       "sizes": "256x256",
       "type": "image/png" 
-    },
-    {
-      "src": "./static/img/vue-logo-144.png",
-      "sizes": "144x144",
-      "type": "image/png" 
     }
   ]
 }

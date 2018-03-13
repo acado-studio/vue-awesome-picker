@@ -154,7 +154,7 @@ export default {
           index = this.pickerData && this.pickerData[i] && this.pickerData[i].indexOf(item.value) > -1
             ? this.pickerData[i].indexOf(item.value) : 0
         } else {
-          index = item;
+          index = item
         }
         return index
       })
