@@ -1,8 +1,8 @@
-const CACHE_NAME = 'vap-cache-0'
+const CACHE_NAME = 'vap-cache-1'
 const cacheUrls = [
-  '/',
-  '/dist/vue-awesome-picker.js',
-  '/static/img/vue-logo.png'
+  './',
+  './dist/vue-awesome-picker.js',
+  './static/img/vue-logo.png'
 ]
 
 self.addEventListener('install', (event) => {
