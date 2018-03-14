@@ -1,42 +1,34 @@
-const cacheVersion = '0'
-const cacheKey = `vap-cache-${cacheVersion}`
-const cacheList = [
+const CACHE_NAME = 'vap-cache-3'
+const cacheUrls = [
   '/',
   '/dist/vue-awesome-picker.js',
   '/static/img/vue-logo.png'
 ]
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(cacheKey)
-      .then(cache => cache.addAll(cacheList))
-      .then(() => self.skipWaiting())
+self.addEventListener('install', (event) => {
+  event.waitUntil( // 确保在缓存之后完成 install
+    caches.open(CACHE_NAME).then(cache => cache.addAll(cacheUrls))
   )
 })
 
-self.addEventListener('fetch', (e) => {
-  e.respondWith(
-    caches.match(e.request).then((response) => {
-      if (response != null) {
-        return response
-      }
-      return fetch(e.request.url)
+self.addEventListener('fetch', (event) => {
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request)
     })
   )
 })
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    Promise.all(
-      caches.keys().then(cacheNames => {
-        return cacheNames.map(name => {
-          if (name !== cacheKey) {
-            return caches.delete(name)
+self.addEventListener('active', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheKeys) => {
+      return Promise.all(
+        cacheKeys.map((cacheKey) => {
+          if (cacheKey !== CACHE_NAME) {
+            return caches.delete(cacheKey)
           }
         })
-      })
-    ).then(() => {
-      return self.clients.claim()
+      )
     })
   )
 })
