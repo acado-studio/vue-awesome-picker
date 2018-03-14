@@ -8,7 +8,7 @@
 * 颜色可配置
 
 ## Demo
->彩蛋：Demo 已支持 Service Worker
+>PS：Demo 已启用 Service Worker
 
 ![](./static/img/qr-code.png)
 
