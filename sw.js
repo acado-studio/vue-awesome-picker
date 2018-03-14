@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vap-cache-3'
+const CACHE_NAME = 'vap-cache-1'
 const cacheUrls = [
   '/',
   '/dist/vue-awesome-picker.js',
@@ -19,7 +19,7 @@ self.addEventListener('fetch', (event) => {
   )
 })
 
-self.addEventListener('active', (event) => {
+self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheKeys) => {
       return Promise.all(
