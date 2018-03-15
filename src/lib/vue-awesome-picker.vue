@@ -97,29 +97,29 @@ export default {
     return {
       display: false,
       dataChange: false,
-      pickerData: this.dataGetter(),
-      pickerAnchor: this.anchorGetter(),
+      pickerData: this._dataGetter(),
+      pickerAnchor: this._anchorGetter(),
       wheels: []
     }
   },
   watch: {
     data () {
-      this.setPickerData()
+      this._setPickerData()
     }
   },
   computed: {
     proxyData () {
-      return this.dataGetter()
+      return this._dataGetter()
     },
     proxyAnchor () {
-      return this.anchorGetter()
+      return this._anchorGetter()
     },
     dataType () {
       return !Array.isArray(this.proxyData[0]) ? DATA_CASCADE : DATA_NORMAL
     }
   },
   methods: {
-    dataGetter () {
+    _dataGetter () {
       let data = null
       switch (this.type) {
         case TYPE_TIME:
@@ -133,7 +133,7 @@ export default {
       return data.slice()
     },
 
-    anchorGetter () {
+    _anchorGetter () {
       let anchor = []
       if (this.anchor.length) {
         anchor = this.anchor
@@ -163,11 +163,18 @@ export default {
 
     show () {
       this.display = true
+      if (!this.wheels.length || this.dataChange) {
+        this.$nextTick(() => {
+          this.dataType === DATA_CASCADE && this._updatePickerData()
+          const wheelWrapper = this.$refs.wheelWrapper
+          this.pickerData.forEach((item, index) => {
+            this._createWheel(wheelWrapper, index).enable()
+          })
+          this._wheelToAnchor(this.proxyAnchor)
 
-      if (!this.wheels || !this.wheels.length || this.dataChange) {
-        this.dataChange = false
-        this.initPicker()
-        this.dataType === DATA_CASCADE && this.updatePickerData()
+          this.dataChange && this._destroyExtraWheels()
+          this.dataChange = false
+        })
       } else {
         this.wheels.forEach((wheel) => {
           wheel.enable()
@@ -182,18 +189,7 @@ export default {
       this.display = false
     },
 
-    initPicker () {
-      this.wheels = []
-      this.$nextTick(() => {
-        const wheelWrapper = this.$refs.wheelWrapper
-        this.pickerData.forEach((item, index) => {
-          this.createWheel(wheelWrapper, index)
-        })
-        this.wheelToAnchor(this.proxyAnchor)
-      })
-    },
-
-    createWheel (wheelWrapper, i) {
+    _createWheel (wheelWrapper, i) {
       if (!this.wheels[i]) {
         const wheel = this.wheels[i] = new BScroll(wheelWrapper.children[i], {
           wheel: {
@@ -204,7 +200,7 @@ export default {
           swipeTime: 1800
         })
         wheel.on('scrollEnd', () => {
-          this.cascadePickerChange(i)
+          this._cascadePickerChange(i)
         })
       } else {
         this.wheels[i].refresh()
@@ -212,24 +208,24 @@ export default {
       return this.wheels[i]
     },
 
-    cascadePickerChange (i) {
+    _cascadePickerChange (i) {
       if (this.dataType !== DATA_CASCADE) {
         return
       }
-      const newIndex = this.getCurrentValue()[i].index
+      const newIndex = this._getCurrentValue()[i].index
       if (newIndex !== this.pickerAnchor[i]) {
         this.pickerAnchor.splice(i, 1, newIndex)
-        this.updatePickerData(i + 1)
+        this._updatePickerData(i + 1)
       }
     },
 
-    wheelToAnchor (data) {
+    _wheelToAnchor (data) {
       this.wheels.forEach((wheel, i) => {
         wheel.wheelTo(data[i] || 0)
       })
     },
 
-    getCurrentValue () {
+    _getCurrentValue () {
       const value = []
       this.wheels.forEach((wheel, i) => {
         const j = wheel.getSelectedIndex()
@@ -241,27 +237,34 @@ export default {
       return value
     },
 
-    setPickerData () {
-      this.pickerData = this.dataGetter()
-      this.pickerAnchor = this.anchorGetter()
+    _setPickerData () {
+      this.pickerData = this._dataGetter()
+      this.pickerAnchor = this._anchorGetter()
       if (this.display) {
         this.$nextTick(() => {
           const wheelWrapper = this.$refs.wheelWrapper
           this.pickerData.forEach((item, i) => {
-            this.createWheel(wheelWrapper, i)
+            this._createWheel(wheelWrapper, i)
           })
-          this.wheelToAnchor(this.proxyAnchor)
-          const extraWheels = this.wheels.splice(this.pickerData.length)
-          extraWheels.forEach((wheel) => {
-            wheel.destroy()
-          })
+          this._wheelToAnchor(this.proxyAnchor)
+          this._destroyExtraWheels()
         })
       } else {
         this.dataChange = true
       }
     },
 
-    updatePickerData (wheelIndex = 0) {
+    _destroyExtraWheels () {
+      const dataLength = this.pickerData.length
+      if (dataLength < this.wheels.length) {
+        const extraWheels = this.wheels.splice(dataLength)
+        extraWheels.forEach((wheel) => {
+          wheel.destroy()
+        })
+      }
+    },
+
+    _updatePickerData (wheelIndex = 0) {
       let data = this.proxyData.slice()
       let i = 0
       while (data) {
@@ -273,7 +276,7 @@ export default {
           this.pickerData[i] = wheelData
           this.pickerAnchor[i] = wheelIndex === 0
             ? (this.pickerAnchor[i] < data.length ? this.pickerAnchor[i] || 0 : 0)
-            : this.reloadWheel(i, wheelData)
+            : this._reloadWheel(i, wheelData)
         }
         data = data.length ? data[this.pickerAnchor[i]].children : null
         i++
@@ -281,7 +284,8 @@ export default {
       this.pickerData = this.pickerData.slice(0, i)
     },
 
-    reloadWheel (index, data) {
+    _reloadWheel (index, data) {
+      console.log('reload')
       const wheelWrapper = this.$refs.wheelWrapper
       let scroll = wheelWrapper.children[index].querySelector('.wheel-scroll')
       let wheel = this.wheels ? this.wheels[index] : false
@@ -290,7 +294,7 @@ export default {
         this.$set(this.pickerData, index, data)
         this.pickerAnchor[index] = dist
         this.$nextTick(() => {
-          wheel = this.createWheel(wheelWrapper, index)
+          wheel = this._createWheel(wheelWrapper, index)
           wheel.wheelTo(dist)
         })
       }
@@ -304,7 +308,7 @@ export default {
       if (isInTransition) {
         return
       }
-      const selectedValues = this.getCurrentValue()
+      const selectedValues = this._getCurrentValue()
       this.$emit(EVENT_CONFIRM, selectedValues)
       this.hide()
     },
