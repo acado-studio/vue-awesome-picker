@@ -285,7 +285,6 @@ export default {
     },
 
     _reloadWheel (index, data) {
-      console.log('reload')
       const wheelWrapper = this.$refs.wheelWrapper
       let scroll = wheelWrapper.children[index].querySelector('.wheel-scroll')
       let wheel = this.wheels ? this.wheels[index] : false
