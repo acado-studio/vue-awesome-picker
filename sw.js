@@ -1,4 +1,4 @@
-const CACHE_NAME = 'vap-cache-4'
+const CACHE_NAME = 'vap-cache-5'
 const cacheUrls = [
   './',
   './dist/vue-awesome-picker.js',
