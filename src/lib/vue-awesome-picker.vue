@@ -91,7 +91,11 @@ export default {
     colorCancel: {
       type: String,
       default: COLOR_CANCEL
-    }
+    },
+    swipeTime: {
+      type: Number,
+      default: 1800
+    },
   },
   data () {
     return {
@@ -196,8 +200,7 @@ export default {
             selectedIndex: 0,
             rotate: 25
           },
-          bounceTime: 500,
-          swipeTime: 1800
+          swipeTime: this.swipeTime
         })
         wheel.on('scrollEnd', () => {
           this._cascadePickerChange(i)

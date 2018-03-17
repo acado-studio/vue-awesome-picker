@@ -35,6 +35,7 @@ Vue.use(AwesomePicker);
   :colorTitle="picker.colorTitle"
   :colorConfirm="picker.colorConfirm"
   :colorCancel="picker.colorCancel"
+  :swipeTime="picker.swipeTime"
   @cancel="handlePickerCancel"
   @confirm="handlePickerConfirm">
 </awesome-picker>
@@ -60,6 +61,7 @@ methods: {
 | colorTitle | title 颜色 || String | #000000
 | colorConfirm | confirm 颜色 || String | #42b983
 | colorCancel | cancel 颜色 || String | #999999
+| swipeTime | 滚动速度([better-scroll swipeTime](https://ustbhuangyi.github.io/better-scroll/doc/zh-hans/options.html#swipetime)) | | Number | 1800
 
 ### data
 >vue-awesome-picker 通过数据结构不同来区分是普通 picker 还是联级 picker, 所以请严格按照以下数据结构进行配置
