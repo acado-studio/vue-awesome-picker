@@ -129,7 +129,7 @@ methods: {
 ## Development
 
 ``` bash
-git clone git@github.com:fyerl/vue-awesome-picker.git
+git clone git@github.com:Fyerl/vue-awesome-picker.git
 cd vue-awesome-picker
 npm install
 npm run dev
