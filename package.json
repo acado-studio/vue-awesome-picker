@@ -1,12 +1,12 @@
 {
   "name": "vue-awesome-picker",
   "description": "A Vue.js Picker Component",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "author": "Fyerl <fyerl@foxmail.com>",
   "license": "MIT",
   "private": false,
   "main": "dist/vue-awesome-picker.js",
-  "keywords": [    
+  "keywords": [
     "vue",
     "awesome",
     "picker",
@@ -24,7 +24,7 @@
     "url": "https://github.com/Fyerl/vue-awesome-picker"
   },
   "dependencies": {
-    "better-scroll": "^1.8.4",
+    "better-scroll": "^1.9.0",
     "reset-css": "^2.2.1",
     "vue": "^2.5.11"
   },
