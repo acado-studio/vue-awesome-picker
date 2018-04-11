@@ -95,7 +95,7 @@ export default {
     swipeTime: {
       type: Number,
       default: 1800
-    },
+    }
   },
   data () {
     return {
@@ -134,7 +134,7 @@ export default {
         default:
           data = this.data; break
       }
-      return data.slice()
+      return [...data]
     },
 
     _anchorGetter () {
@@ -162,14 +162,14 @@ export default {
         }
         return index
       })
-      return anchor.slice()
+      return [...anchor]
     },
 
     show () {
       this.display = true
       if (!this.wheels.length || this.dataChange) {
+        this.dataType === DATA_CASCADE && this._updatePickerData()
         this.$nextTick(() => {
-          this.dataType === DATA_CASCADE && this._updatePickerData()
           const wheelWrapper = this.$refs.wheelWrapper
           this.pickerData.forEach((item, index) => {
             this._createWheel(wheelWrapper, index).enable()
@@ -268,7 +268,7 @@ export default {
     },
 
     _updatePickerData (wheelIndex = 0) {
-      let data = this.proxyData.slice()
+      let data = [...this.proxyData]
       let i = 0
       while (data) {
         if (i >= wheelIndex) {
