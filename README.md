@@ -43,7 +43,7 @@ Vue.use(AwesomePicker);
 ``` javascript
 methods: {
   show() {
-    this.$ref.picker.show();
+    this.$refs.picker.show();
   }
 }
 ```
