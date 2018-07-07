@@ -55,10 +55,7 @@ export default {
   name: 'awesome-picker',
   props: {
     formatter: {
-      type: Function,
-      default () {
-        return undefined
-      }
+      type: Function
     },
     data: {
       type: Array,
