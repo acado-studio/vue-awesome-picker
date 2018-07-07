@@ -14,9 +14,11 @@
         <div class="picker-mask-top"></div>
         <div class="picker-mask-bottom"></div>
         <div class="picker-wheel-wrapper" ref="wheelWrapper">
-          <div class="picker-wheel" v-for="(wheel, index) in pickerData" :key="index">
+          <div class="picker-wheel" v-for="(wheel, wheelIndex) in pickerData" :key="wheelIndex">
             <ul class="wheel-scroll">
-              <li class="wheel-item" v-for="(item, index) in wheel" :key="index">{{item}}</li>
+              <li class="wheel-item" v-for="(item, itemIndex) in wheel" :key="itemIndex">
+                {{formatter ? formatter(item, itemIndex, wheelIndex) : item}}
+              </li>
             </ul>
           </div>
         </div>
@@ -52,6 +54,12 @@ const EVENT_CANCEL = 'cancel'
 export default {
   name: 'awesome-picker',
   props: {
+    formatter: {
+      type: Function,
+      default () {
+        return undefined
+      }
+    },
     data: {
       type: Array,
       default () {

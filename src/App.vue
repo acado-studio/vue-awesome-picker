@@ -6,6 +6,7 @@
     <p class="btn" @click="showPicker4">区域</p>
     <p class="btn" @click="showPicker2">时间(内置)</p>
     <p class="btn" @click="showPicker3">日期(内置)</p>
+    <p class="btn" @click="showPicker5">格式化显示内容</p>
     <awesome-picker
       ref="picker0"
       :textTitle="picker0.textTitle"
@@ -45,6 +46,15 @@
       :anchor="picker4.anchor"
       @confirm="handlePicker4Confirm">
     </awesome-picker>
+
+    <awesome-picker
+      ref="picker5"
+      :textTitle="picker5.textTitle"
+      :data="picker5.data"
+      :anchor="picker5.anchor"
+      :formatter="picker5.formatter"
+      @confirm="handlePicker5Confirm">
+    </awesome-picker>
   </div>
 </template>
 
@@ -53,7 +63,6 @@ import areaData from './area.js'
 
 const data1 = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 const data2 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-
 export default {
   name: 'app',
   data () {
@@ -114,6 +123,26 @@ export default {
         anchor: [],
         textTitle: '区域选择器',
         data: areaData
+      },
+      picker5: {
+        anchor: [],
+        textTitle: '格式化显示内容',
+        data: [[{
+          id: 1,
+          name:'张三',
+          gender: 'male'
+        }, {
+          id: 2,
+          name:'李四',
+          gender: 'female'
+        }, {
+          id: 3,
+          name:'王五',
+          gender: 'male'
+        }]],
+        formatter (item, itemIndex, wheelIndex) {
+          return `${item.name}(${item.gender === 'male' ? '男' : '女'})`
+        }
       }
     }
   },
@@ -155,6 +184,14 @@ export default {
     },
     handlePicker4Confirm (v) {
       this.picker4.anchor = v
+      this.value = v ? JSON.stringify(v) : null
+    },
+
+    showPicker5 () {
+      this.$refs.picker5.show()
+    },
+    handlePicker5Confirm (v) {
+      this.picker5.anchor = v
       this.value = v ? JSON.stringify(v) : null
     }
   }
