@@ -1,3 +1,6 @@
+## ⚠️ **DEPRECATED** ⚠️
+内部逻辑 💩
+
 # vue-awesome-picker [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url]
 基于 [Vue.js](https://github.com/vuejs/vue) & [Better-Scroll](https://github.com/ustbhuangyi/better-scroll) 的移动端 picker 组件
 
