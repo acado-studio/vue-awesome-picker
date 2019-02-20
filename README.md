@@ -137,8 +137,6 @@ cd vue-awesome-picker
 npm install
 npm run dev
 ```
-## Contact
-![](./static/img/wechat.jpg)
 
 [npm-image]: https://img.shields.io/npm/v/vue-awesome-picker.svg?style=flat
 [npm-url]: https://npmjs.org/package/vue-awesome-picker
