@@ -1,6 +1,3 @@
-> ## 2019-08-28 ##
-> 弃坑一年多，但仍有不少同学在用，还是决定把坑填了，填坑中
-
 # vue-awesome-picker [![NPM Version][npm-image]][npm-url] [![NPM Downloads][downloads-image]][downloads-url]
 基于 [Vue.js](https://github.com/vuejs/vue) & [Better-Scroll](https://github.com/ustbhuangyi/better-scroll) 的移动端 picker 组件
 
